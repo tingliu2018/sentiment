@@ -5,6 +5,13 @@
  */
 package ratingextractor;
 
+import data.Tags;
+import data.Tag;
+import data.School;
+import data.StudentRate;
+import data.Professor;
+import data.Course;
+import data.StudentRates;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
