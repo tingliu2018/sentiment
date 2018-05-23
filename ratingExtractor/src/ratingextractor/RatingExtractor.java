@@ -45,9 +45,9 @@ public class RatingExtractor {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-//        String path = "C:\\Users\\ting\\NetBeans\\ratingExtractor\\data";
-        String path = "C:\\Users\\ting\\research";
-        String outPath = "C:\\Users\\ting\\NetBeans\\ratingExtractor\\text\\";
+        String path = "C:\\NetBeans\\sentiment\\ratingExtractor\\data\\";
+//        String path = "C:\\Users\\ting\\research";
+        String outPath = "C:\\NetBeans\\sentiment\\ratingExtractor\\obj\\";
         RatingExtractor re = new RatingExtractor(path, outPath);
         re.parse();
     }
@@ -132,7 +132,8 @@ public class RatingExtractor {
 //                    Out.print(prf.toString());
 
 //                    System.out.println("tags: " + tags);
-                        writeText(prf, dir, file);
+//                        writeText(prf, dir, file);
+                        writeObj(prf, dir, file);
                     } catch (Exception e) {
                         Out.print("failed for " + file.getName());
                         this.problem_files.add(file.getAbsolutePath());
@@ -143,8 +144,8 @@ public class RatingExtractor {
     }
 
     public void writeObj(Professor prf, File dir, File file) throws FileNotFoundException, IOException {
-        String fileName = outPath + dir.getName() + "\\" + file.getName().replace("htm", "txt");
-        fileName = fileName.replace("txtl", "txt");
+        String fileName = outPath + dir.getName() + "\\" + file.getName().replace("htm", "obj");
+        fileName = fileName.replace("objl", "obj");
         FileOutputStream fos = new FileOutputStream(fileName);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(prf);
