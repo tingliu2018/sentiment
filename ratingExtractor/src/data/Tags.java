@@ -9,12 +9,16 @@ import java.util.ArrayList;
 import utils.Out;
 
 /**
- *
+ * This method contains an array list of tags given to a professor
  * @author ting
  */
 public class Tags extends ArrayList {
 
     @Override
+    /**
+     * This method gets the tag object from the current index in the array list.
+     * @return - tag at the current array index.
+     */
     public Tag get(int index) {
         return (Tag)super.get(index); //To change body of generated methods, choose Tools | Templates.
     }

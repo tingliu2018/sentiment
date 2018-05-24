@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- *
+ * This class goes over a single student rating about a single professor
  * @author ting
  */
 public class StudentRate implements Serializable {
@@ -24,6 +24,18 @@ public class StudentRate implements Serializable {
     private int helpful;
     private int nohelp;
 
+    /**
+     * This constructor initializes a student rating of a professor
+     * @param rating - the rating the student has given a professor, ranging from awful to awesome
+     * @param date - the date the review was made
+     * @param overall - The overall score they gave the professor, from 0 to 5
+     * @param difficulty - how difficult the student found the course
+     * @param course - the name of the course the student took
+     * @param tags -the tags the student gave the professor.
+     * @param comment - he comment the student gave the professor.
+     * @param helpful - whether people found the rating to be helpful.
+     * @param nohelp - whether people found the rating to be of no help.
+     */
     public StudentRate(String rating, String date, double overall, double difficulty, Course course, ArrayList<Tag> tags, String comment, int helpful, int nohelp) {
         this.rating = rating;
         this.date = date;
