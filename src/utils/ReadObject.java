@@ -26,9 +26,9 @@ import ratingextractor.StudentRates;
  */
 public class ReadObject {
 
-    private static String[] s = new String[107330];
+    private static String[] s = new String[114360];
     private static int counter = 0;
-    private static File output = new File("C:\\Users\\Owner\\Desktop\\ratingExtractor\\output4.txt");
+    private static File output = new File("C:\\Users\\Owner\\Desktop\\Data\\data2.txt");
 
     public Professor readObjectFromFile(String filepath, PrintWriter p) {
         try {
@@ -64,7 +64,7 @@ public class ReadObject {
         ReadObject rObj = new ReadObject();
         //sets path to get test data
         PrintWriter p = new PrintWriter(output);
-        Path dir = Paths.get("C:\\Users\\Owner\\Desktop\\ratingExtractor\\text\\sentiment4");
+        Path dir = Paths.get("C:\\Users\\Owner\\Desktop\\ratingExtractor\\text\\sentiment6");
         //counter for array and array upper bound
         counter = 0;
         int i = 0;
