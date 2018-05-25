@@ -1,13 +1,17 @@
 package depdendcy;
 
+import edu.stanford.nlp.io.EncodingPrintWriter;
+import edu.stanford.nlp.ling.HasWord;
 import java.io.*;
 import java.util.*;
 
 import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.ling.Label;
+import edu.stanford.nlp.ling.SentenceUtils;
 import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.process.*;
 import edu.stanford.nlp.parser.lexparser.*;
+import utils.Out;
 
 public class StanfordParser {
 
@@ -146,10 +150,8 @@ public class StanfordParser {
         //String peen=sp.getTree().pennString();
         //fill in the required information(td index is from 1)
 //        Graph g = new Graph();
-
         //test for undirected graph
 //        Graph bidirectg = new Graph();
-
         Collection<TypedDependency> colTD = getDependencies();
         Iterator it = colTD.iterator();
         while (it.hasNext()) {
@@ -185,7 +187,6 @@ public class StanfordParser {
 
 //            bidirectg.checkNewEdge(sNode, dNode, rel);
 //            bidirectg.checkNewEdge(dNode, sNode, "reversedRelation");
-            
         }
         colTD.clear();
 
@@ -200,8 +201,8 @@ public class StanfordParser {
 
     /**
      * @param targetConcept: e.g "federal bureaucracy"
-     * @param highICWord: e.g "home" true: targetConcept is in the sub-sentence
-     * outside the highICWord (get rid of this highICWord)
+     * @param highICWord: e.g "home" true: targetConcept is in the sub-sentenceWords
+ outside the highICWord (get rid of this highICWord)
      */
     public boolean checkSubSentence(Graph g, String targetConcept, String highICWord) {
         ArrayList<String> relSubSentence = new ArrayList<String>();
@@ -233,7 +234,7 @@ public class StanfordParser {
             }
         }
 
-        //check if the nTarget is in the sub-sentence
+        //check if the nTarget is in the sub-sentenceWords
         nHighICWord = g.getNode(highICWord);
 
         while (true) {
@@ -257,11 +258,27 @@ public class StanfordParser {
 
         return false;
     }
+    /**
+     * 
+     * @param doc string that may contain a list of sentences
+     * @return ArryList<String> a list of sentences
+     */
+    public ArrayList<String> sentenceSplitter(String doc) {
+        DocumentPreprocessor dp = new DocumentPreprocessor(doc);
+        ArrayList<String> sentences = new ArrayList();
+        for (List<HasWord> sentenceWords : dp) {
+            String sentence = SentenceUtils.listToString(sentenceWords);
+            sentences.add(sentence);
+            Out.print(sentence);
+        }
+        return sentences;
+    }
 
     public static void main(String[] args) {
         StanfordParser sp_ = new StanfordParser();
         Graph g = new Graph();
         sp_.buildDependcyGraph("Love her flipped style teaching ", g);
+        sp_.sentenceSplitter("/Users/ting/NetBeansProjects/sentiment/ratingExtractor/data/test.txt");
 //        boolean bSubSen = sp_.checkSubSentence(g, "affirmative action", "sore");
         System.out.println();
     }
