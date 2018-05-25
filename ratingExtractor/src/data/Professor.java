@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * 
+ * This class creates a professor object with information about them.
  * @author ting
  * 
  */
@@ -25,6 +25,19 @@ public class Professor implements Serializable {
     private String hotness;
     private String department;
 
+    /**
+     * This constructor initializes the professor class with the proper instance variable names
+     * @param fName - the professor's first name.
+     * @param lName - the professor's last name.
+     * @param school - the school the professor teaches at
+     * @param overall - the overall rating the professor has.
+     * @param ratings - The ratings the students have given the professor
+     * @param tags - What the students say about the professor from a list of tags on rmp.
+     * @param difficulty - How difficult the students thought the courses this professor taught were. 
+     * @param takeAgain - whether the student would take the course again.
+     * @param hotness - if a student thinks a teacher's teaching style is considered "hot"
+     * @param department - the department the professor teaches in
+     */
     public Professor(String fName, String lName, School school, double overall, StudentRates ratings, Tags tags, double difficulty, String takeAgain, String hotness, String department) {
         this.fName = fName;
         this.lName = lName;

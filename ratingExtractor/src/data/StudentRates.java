@@ -8,12 +8,17 @@ package data;
 import java.util.ArrayList;
 
 /**
- *
+ * This class is an arraylist of different instances of Student Rate that are stored
+ * in an arraylist, and contains all of the student rates for a single professor
  * @author ting
  */
 public class StudentRates extends ArrayList<StudentRate> {
 
     @Override
+    /**
+     * This method returns the student rate for a professor at the given index in the array list.
+     * @return - the student rate at the index in the array list.
+     */
     public StudentRate get(int index) {
         return (StudentRate)super.get(index); //To change body of generated methods, choose Tools | Templates.
     }
