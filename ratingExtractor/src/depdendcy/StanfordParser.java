@@ -27,6 +27,8 @@ public class StanfordParser {
     Collection tdl;
     TreebankLanguagePack tlp = new PennTreebankLanguagePack();
     GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
+    static ArrayList<String> roots = new ArrayList<String>();
+    static ArrayList<String> nouns = new ArrayList<String>();
 
     public void parse(String sentence) {
         try {
@@ -154,6 +156,7 @@ public class StanfordParser {
 //        Graph bidirectg = new Graph();
         Collection<TypedDependency> colTD = getDependencies();
         Iterator it = colTD.iterator();
+        String nounPhrase = "";
         while (it.hasNext()) {
             TypedDependency td = (TypedDependency) it.next();
 
@@ -170,10 +173,18 @@ public class StanfordParser {
             String depWord = td.dep().value();
             int depId = td.dep().index();
             String depTag = "";
+            if (govWord.equals("ROOT")) {
+                roots.add(depWord);
+            }
+
             if (depId == 0) {
                 depTag = "";
             } else {
                 depTag = alWords.get(depId - 1).tag();
+                if (depTag.substring(0, 1).equals("N")) {
+                    nounPhrase += depWord + " ";
+                }
+
             }
 
             String rel = td.reln().getShortName();
@@ -188,6 +199,8 @@ public class StanfordParser {
 //            bidirectg.checkNewEdge(sNode, dNode, rel);
 //            bidirectg.checkNewEdge(dNode, sNode, "reversedRelation");
         }
+        nouns.add(nounPhrase);
+        nounPhrase = "";
         colTD.clear();
 
 //        Node head=bidirectg.getNode("government");
@@ -201,8 +214,8 @@ public class StanfordParser {
 
     /**
      * @param targetConcept: e.g "federal bureaucracy"
-     * @param highICWord: e.g "home" true: targetConcept is in the sub-sentenceWords
- outside the highICWord (get rid of this highICWord)
+     * @param highICWord: e.g "home" true: targetConcept is in the
+     * sub-sentenceWords outside the highICWord (get rid of this highICWord)
      */
     public boolean checkSubSentence(Graph g, String targetConcept, String highICWord) {
         ArrayList<String> relSubSentence = new ArrayList<String>();
@@ -258,8 +271,9 @@ public class StanfordParser {
 
         return false;
     }
+
     /**
-     * 
+     *
      * @param doc string that may contain a list of sentences
      * @return ArryList<String> a list of sentences
      */
@@ -274,11 +288,28 @@ public class StanfordParser {
         return sentences;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         StanfordParser sp_ = new StanfordParser();
         Graph g = new Graph();
+        String path = "C:\\Users\\Logan Brandt\\Documents\\internship\\examples\\1102085.txt";
+        File inputFile = new File(path);
+        Scanner sc = new Scanner(inputFile);
         sp_.buildDependcyGraph("Love her flipped style teaching ", g);
-        sp_.sentenceSplitter("/Users/ting/NetBeansProjects/sentiment/ratingExtractor/data/test.txt");
+        sp_.sentenceSplitter("C:\\Users\\Logan Brandt\\workstudy\\Project\\sentiment\\ratingExtractor\\data\\test.txt");
+        while(sc.hasNext())
+        {
+            String test = sc.nextLine();
+            if (test.contains("comment=")) {
+                test = test.substring(8);
+                if (test.equals("No Comments")) {
+                    continue;
+                }
+                else
+                {
+                    sp_.buildDependcyGraph(test, g);
+                }
+            }
+        }
 //        boolean bSubSen = sp_.checkSubSentence(g, "affirmative action", "sore");
         System.out.println();
     }
