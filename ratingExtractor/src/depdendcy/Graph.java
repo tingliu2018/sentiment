@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 /**
- *
+ * This method creates a structure that connects all the words in a sentence by 
+ * creating a node for each of the words, and edges to connect the words together
+ * in a parent child kind of relationship.
  * @author cslin
  */
 public class Graph implements Serializable {
@@ -26,6 +28,14 @@ public class Graph implements Serializable {
     private ArrayList<Edge> inEdge = null;
     private final static long serialVersionUID = -3059622786385294161L; //7370388788340660600L;//4176635012854306031L;//7370388788340660600L;//7370388788340660600L;//
 
+    /**
+     * This method checks to see if the edge already exists in the graph. If it does
+     * not, it adds it to listEdge. Otherwise, it does not. It also checks to see 
+     * if the nodes are in listNode yet. If they are not, it adds them to list node
+     * @param sNode - The first node of the edge.
+     * @param dNode - The second node of the edge.
+     * @param relation - The relationship between the two nodes. 
+     */
     public void checkNewEdge(Node sNode, Node dNode, String relation) {
         boolean bFst = false, bSnd = false;
         Node node1 = null, node2 = null;
@@ -71,10 +81,20 @@ public class Graph implements Serializable {
         iEdge++;
     }
 
+    /**
+     * This method gets the list of nodes this graph has
+     * @return - listNode
+     */
     public ArrayList<Node> getNodes() {
         return listNode;
     }
 
+    /**
+     * This method gets a node based on the id, or place in the sentence of the 
+     * node. The root word is 0. 
+     * @param id - place in sentence word was located.
+     * @return - node at the certain id.
+     */
     public Node getNode(int id) {
 
         for (int i = 0; i < listNode.size(); i++) {
@@ -86,6 +106,11 @@ public class Graph implements Serializable {
     }
     //added by TL
 
+    /**
+     * This method gets the node based on the name of the word being searched for.
+     * @param name - word being searched for.
+     * @return - the node attached to the word.
+     */
     public Node getNode(String name) {
 
         for (int i = 0; i < listNode.size(); i++) {
@@ -106,10 +131,20 @@ public class Graph implements Serializable {
         return null;
     }//added by Zumrut 10/28/2013
 
+    /**
+     * This method gets the list of edges this graph has
+     * @return listEdge
+     */
     public ArrayList<Edge> getEdges() {
         return listEdge;
     }
 
+    /**
+     * This method gets the children of a node and stores them in an array list.
+     * Is empty if the node is null or contains no children.
+     * @param node - the node whose children are being searched for
+     * @return - an array list of all the children of the input node
+     */
     public ArrayList<Node> getChildren(Node node) {
         ArrayList<Node> children = new ArrayList<Node>();
         if (node == null) {
@@ -134,6 +169,12 @@ public class Graph implements Serializable {
 
     }
 
+    /**
+     * This method takes a child node, and returns the parent of the node.
+     * Is null if the node is the root or the node was null.
+     * @param node - the node whose parent is being searched for.
+     * @return - the parent of the inout node
+     */
     public Node getParent(Node node) {
         Node par = null;
         if (node == null) {
@@ -183,7 +224,8 @@ public class Graph implements Serializable {
 
     /**
      * Extract all edges starting from node
-     *
+     * @param node - The node we are starting from.
+     * @return - An array list of edges that go from that node down the tree.
      */
     public ArrayList<Edge> outFlow(Node node) {
         ArrayList<Edge> outEdge = new ArrayList<Edge>();
@@ -211,7 +253,8 @@ public class Graph implements Serializable {
 
     /**
      * Extract all edges ending in node
-     *
+     * @param node - The node we are starting from.
+     * @return - An array list of edges that go from that node down the tree.
      */
     public ArrayList<Edge> inFlow(Node node) {
         ArrayList<Edge> inEdge = new ArrayList<Edge>();
