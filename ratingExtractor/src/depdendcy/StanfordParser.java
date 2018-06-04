@@ -332,7 +332,7 @@ public class StanfordParser {
         List<List<Node>> stringArray = new ArrayList<List<Node>>();
         temp = new ArrayList<Node>(Arrays.asList(nodes.get(0)));
         List<Node> toAdd = new ArrayList<Node>();
-        toAdd.add(roots.get(0));
+        toAdd.add(nodes.get(0));
         stringArray.add(toAdd);
         // This loop prints out what each word of the sentence means.
         for (int i = 0; i < stringArray.size(); i++) {
@@ -361,7 +361,6 @@ public class StanfordParser {
                 if (!n.getPos().equals("")) {
                     if (n.getPos().substring(0, 1).equals("N")) {
                         if (!usedNouns.contains(n.getName())) {
-                            System.out.print(g.getParent(n).getName() + " ");
                             children = g.getChildren(n);
                             usedNouns.add(n.getName());
                             int r = 0;
@@ -383,8 +382,8 @@ public class StanfordParser {
                     }
                 }
             }
-            System.out.println("");
         }
+        System.out.println("");
         //This method prints out the parent nodes and their children, or leaf if they have no children
         for (int k = 0; k < stringArray.size(); k++) {
             toAdd = stringArray.get(k);
@@ -412,3 +411,4 @@ public class StanfordParser {
         usedNouns.clear();
     }
 }
+
