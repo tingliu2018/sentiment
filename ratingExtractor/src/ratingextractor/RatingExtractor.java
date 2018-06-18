@@ -45,9 +45,10 @@ public class RatingExtractor {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        String path = "C:\\NetBeans\\sentiment\\ratingExtractor\\data\\";
-//        String path = "C:\\Users\\ting\\research";
-        String outPath = "C:\\NetBeans\\sentiment\\ratingExtractor\\obj\\";
+//        String path = "C:\\NetBeans\\sentiment\\ratingExtractor\\data\\";
+        String path = "C:\\research\\rateMyProfessors\\htmls\\";
+//        String outPath = "C:\\NetBeans\\sentiment\\ratingExtractor\\obj\\";
+        String outPath = "C:\\research\\rateMyProfessors\\objs\\";
         RatingExtractor re = new RatingExtractor(path, outPath);
         re.parse();
     }
