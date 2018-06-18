@@ -311,22 +311,26 @@ public class StanfordParser {
     public static void main(String[] args) throws FileNotFoundException {
         StanfordParser sp_ = new StanfordParser();
         Graph g = new Graph();
-        String path = "C:\\Users\\Logan Brandt\\Documents\\internship\\ratingExtractor\\ratingExtractor\\sentiment\\ratingExtractor\\MaleGoodCommentsPt2.txt";//"C:\\Users\\Logan Brandt\\Documents\\internship\\examples\\LotsOfComments.txt";
-        File outFile = new File("MaleGoodPhrase.txt");
-        PrintWriter pw = new PrintWriter(outFile);
-        ArrayList<String> sentenceList = sp_.sentenceSplitter(path);
-        //sp_.buildDependcyGraph("Joe is a person", g);
-        //sp_.sentenceSplitter("C:\\Users\\Logan Brandt\\workstudy\\Project\\sentiment\\ratingExtractor\\data\\test.txt");
-        for (int i = 0; i < sentenceList.size(); i++) {//sentenceList.size(); i++) {//878525
-            sp_.buildDependcyGraph(pw, sentenceList.get(i), g);
-            g = new Graph();
-        }
+        String path = "C:\\research\\rateMyProfessors\\genderReviews\\";
+        File dir = new File(path);
+        File[] fileList = dir.listFiles();
+        for (File file : fileList) {
+            File out = new File("C:\\research\\rateMyProfessors\\genderReviewsOutput\\" + file.getName() + ".txt");
+            PrintWriter pw = new PrintWriter(out);
+            ArrayList<String> sentenceList = sp_.sentenceSplitter(file.getAbsolutePath());
+            //sp_.buildDependcyGraph("Joe is a person", g);
+            //sp_.sentenceSplitter("C:\\Users\\Logan Brandt\\workstudy\\Project\\sentiment\\ratingExtractor\\data\\test.txt");
+            for (int i = 0; i < sentenceList.size(); i++) {
+                sp_.buildDependcyGraph(pw, sentenceList.get(i), g);
+                g = new Graph();
+            }
 
 //        boolean bSubSen = sp_.checkSubSentence(g, "affirmative action", "sore");
-        System.out.println();
-        pw.close();
+            System.out.println();
+            pw.close();
+        }
     }
-
+    
     /**
      * This method creates a noun phrase based on the graph of a sentence.
      *
