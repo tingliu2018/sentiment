@@ -363,7 +363,7 @@ public class StanfordParser {
         //ArrayList<Node> innerChildren = new ArrayList<Node>();
         ArrayList<Node> usedNouns = new ArrayList<>();
         ArrayList<Node> usedWords = new ArrayList<>();
-        int[] indeces = new int[20];
+        ArrayList<Integer> indeces = new ArrayList<>();
         int index = 0;
         //ArrayList<Node> phrase = new ArrayList<>();
         //This loop goes through and gets a noun phrase, while also making sure it doesn't repeat nouns
@@ -418,6 +418,7 @@ public class StanfordParser {
         System.out.println("");
         Edge child;
         Node child2;
+        int findIndex = 0;
         usedNouns.clear();
         ArrayList<Node> nounPhrase = new ArrayList<Node>();
         ArrayList<Edge> children2 = new ArrayList<Edge>();
@@ -436,7 +437,7 @@ public class StanfordParser {
                             if ((child2.getPos().substring(0, 1).equals("N") && !child.getRelation().contains("obj") && !child.getRelation().contains("acl:relcl") && !child.getRelation().contains("appos"))) {
                                 nounPhrase.add(child2);
                                 usedNouns.add(child2);
-                                indeces[index] = nounPhrase.indexOf(n) + 1;
+                                indeces.add(nounPhrase.indexOf(n) + 1);
                                 index++;
                             } else if (!(child2.getPos().substring(0, 1).equals("V") || child.getRelation().contains("obj") || child.getRelation().contains("acl:relcl") || child.getRelation().contains("appos"))) {
                                 nounPhrase.add(child2);
@@ -446,14 +447,15 @@ public class StanfordParser {
                             }
                         }
                     } else {
-                        int addIndex = indeces[usedNouns.lastIndexOf(n)];
+                        int addIndex = indeces.get(findIndex);
+                        findIndex++;
                         for (int y = 0; y < children2.size(); y++) {
                             child = children2.get(y);
                             child2 = child.getChild();
                             if ((child2.getPos().substring(0, 1).equals("N") && !child.getRelation().contains("obj") && !child.getRelation().contains("acl:relcl") && !child.getRelation().contains("appos"))) {
                                 nounPhrase.add(addIndex, child2);
                                 usedNouns.add(child2);
-                                indeces[index] = nounPhrase.indexOf(n) + 1;
+                                indeces.add(nounPhrase.indexOf(n) + 1);
                                 index++;
                                 addIndex++;
                             } else if (!(child2.getPos().substring(0, 1).equals("V") || child.getRelation().contains("obj") || child.getRelation().contains("acl:relcl") || child.getRelation().contains("appos"))) {
