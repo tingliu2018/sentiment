@@ -161,7 +161,7 @@ public class StanfordParser {
      * @param sentence - the string being parsed.
      * @param g - an empty graph that will store information from the sentence.
      */
-    public void buildDependcyGraph(PrintWriter pw, String sentence, Graph g) {
+    public void buildDependcyGraph(String sentence, Graph g) {
         parse(sentence);
         if (getTree() == null) {
             g = null;
@@ -218,7 +218,7 @@ public class StanfordParser {
 //            bidirectg.checkNewEdge(dNode, sNode, "reversedRelation");
         }
         //nouns.add(nounPhrase);
-        getNounPhrases(pw, g);
+        //getNounPhrases(pw, g);
         colTD.clear();
 
 //        Node head=bidirectg.getNode("government");
@@ -295,7 +295,7 @@ public class StanfordParser {
      * all the sentences from that file.
      *
      * @param doc string that may contain a list of sentences
-     * @return ArryList<String> a list of sentences
+     * @return ArrayList(String) a list of sentences
      */
     public ArrayList<String> sentenceSplitter(String doc) {
         DocumentPreprocessor dp = new DocumentPreprocessor(doc);
@@ -311,35 +311,27 @@ public class StanfordParser {
     public static void main(String[] args) throws FileNotFoundException {
         StanfordParser sp_ = new StanfordParser();
         Graph g = new Graph();
-        String path = "C:\\research\\rateMyProfessors\\genderReviews\\";
-        File dir = new File(path);
-        File[] fileList = dir.listFiles();
-        for (File file : fileList) {
-            File out = new File("C:\\research\\rateMyProfessors\\genderReviewsOutput\\" + file.getName() + ".txt");
-            PrintWriter pw = new PrintWriter(out);
-            ArrayList<String> sentenceList = sp_.sentenceSplitter(file.getAbsolutePath());
-            //sp_.buildDependcyGraph("Joe is a person", g);
-            //sp_.sentenceSplitter("C:\\Users\\Logan Brandt\\workstudy\\Project\\sentiment\\ratingExtractor\\data\\test.txt");
-            for (int i = 0; i < sentenceList.size(); i++) {
-                sp_.buildDependcyGraph(pw, sentenceList.get(i), g);
-                g = new Graph();
-            }
+        String path = "C:\\Users\\Logan Brandt\\Documents\\internship\\ratingExtractor\\ratingExtractor\\sentiment\\ratingExtractor\\MaleGoodCommentsPt2.txt";
+        ArrayList<String> sentenceList = sp_.sentenceSplitter(path);
+        //sp_.buildDependcyGraph("Joe is a person", g);
+        //sp_.sentenceSplitter("C:\\Users\\Logan Brandt\\workstudy\\Project\\sentiment\\ratingExtractor\\data\\test.txt");
+        for (int i = 229794; i < sentenceList.size(); i++) {//878525
+            sp_.buildDependcyGraph(sentenceList.get(i), g);
+            g = new Graph();
+        }
 
 //        boolean bSubSen = sp_.checkSubSentence(g, "affirmative action", "sore");
-            System.out.println();
-            pw.close();
-        }
+        //System.out.println();
     }
-    
+
     /**
      * This method creates a noun phrase based on the graph of a sentence.
      *
-     * @param pw - The printwriter for the file that the data is sent to
      * @param g - the graph of the sentence being examined.
      */
-    public static void getNounPhrases(PrintWriter pw, Graph g) {
-        System.out.println(timesRun);
-        timesRun++;
+    public static ArrayList<String> getNounPhrases(Graph g) {
+        //System.out.println(timesRun);
+        //timesRun++;
         ArrayList<Node> temp;
         List<List<Node>> stringArray = new ArrayList<>();
         List<Node> toAdd = new ArrayList<>();
@@ -363,65 +355,12 @@ public class StanfordParser {
             }
         }
         Node n;
-        ArrayList<Node> children;
-        //ArrayList<Node> innerChildren = new ArrayList<Node>();
         ArrayList<Node> usedNouns = new ArrayList<>();
         ArrayList<Node> usedWords = new ArrayList<>();
         ArrayList<Integer> indeces = new ArrayList<>();
-        int index = 0;
-        //ArrayList<Node> phrase = new ArrayList<>();
-        //This loop goes through and gets a noun phrase, while also making sure it doesn't repeat nouns
-        /*for (int k = 0; k < stringArray.size(); k++) {
-            toAdd = stringArray.get(k);
-            for (int j = 0; j < toAdd.size(); j++) {
-                n = toAdd.get(j);
-                if (!n.getPos().equals("")) {
-                    if (n.getPos().substring(0, 1).equals("N")) {
-                        if (!usedNouns.contains(n.getName())) {
-                            phrase.add(n);
-                            Node parent = g.getParent(n);
-                            children = g.getChildren(n);
-                            usedNouns.add(n.getName());
-                            int r = 0;
-                            while (r < children.size()) {
-                                Node child = children.get(r);
-                                if (child.getPos().substring(0, 1).equals("N")) {
-                                    if (usedNouns.contains(child.getName())) {
-                                        r++;
-                                        continue;
-                                    } else {
-                                        /*innerChildren = g.getChildren(child);
-                                        for(int c = 0; c < innerChildren.size(); c++)
-                                        {
-                                            Node addTo = innerChildren.get(c);
-                                            children.add(addTo);
-                                        }
-                                        usedNouns.add(child.getName());
-                                    }
-                                }
-                                phrase.add(child);
-                                usedWords.add(child);
-                                r++;
-                            }
-                            if (parent != null) {
-                                if (!usedWords.contains(parent) && !parent.getName().equals("ROOT")) {
-                                    phrase.add(parent);
-                                    usedWords.add(parent);
-                                }
-                            }
-                            if (!(phrase.size() < 2 || phrase.size() > 8)) {
-                                //sort(pw, phrase);
-                            }
-                            phrase.clear();
-                            children.clear();
-                        }
-                    }
-                }
-            }
-        }*/
-        System.out.println("");
         Edge child;
         Node child2;
+        int index = 0;
         int findIndex = 0;
         usedNouns.clear();
         ArrayList<Node> nounPhrase = new ArrayList<Node>();
@@ -480,42 +419,19 @@ public class StanfordParser {
             }
             //System.out.println("");
         }
-        sort(pw, nounPhrase, usedNouns);
+        ArrayList<String> answer = sort(nounPhrase, usedNouns);
         nounPhrase.clear();
-
-        /*for (int k = 0; k < stringArray.size(); k++) {
-            toAdd = stringArray.get(k);
-            for (int j = 0; j < toAdd.size(); j++) {
-                n = toAdd.get(j);
-                children = g.getChildren(n);
-                if (!children.isEmpty()) {
-                    System.out.print("parent: " + n.getName() + " ");
-                } else {
-                    System.out.println("Leaf: " + n.getName() + " ");
-                }
-                for (int y = 0; y < children.size(); y++) {
-                    n = children.get(y);
-                    System.out.print("child: " + n.getName() + " , ");
-                    if (y + 1 == children.size()) {
-                        System.out.println("");
-                    }
-                }
-            }
-            System.out.println("");
-        }
-        ArrayList<Edge> e = g.outFlow(roots.get(0));
-        for (int i = 0; i < e.size(); i++) {
-            System.out.println(e.get(i).getChild().getPos());
-        }*/
-        //clears the array lists, since we are done parsing this sentence.
         roots.clear();
         usedNouns.clear();
         usedWords.clear();
+        return answer;
     }
 
-    public static void sort(PrintWriter pw, ArrayList<Node> nodes, ArrayList<Node> usedNouns) {
+    public static ArrayList<String> sort(ArrayList<Node> nodes, ArrayList<Node> usedNouns) {
         int indexMin;
         Node valMin;
+        String nPhrase = "";
+        ArrayList<String> answerList = new ArrayList<>();
         for (int i = 0; i < (nodes.size() - 1); i++) {
             indexMin = i;
             for (int j = i + 1; j < nodes.size(); j++) {
@@ -528,13 +444,12 @@ public class StanfordParser {
             nodes.set(i, valMin);
         }
         for (int k = 0; k < nodes.size(); k++) {
-            pw.print(nodes.get(k).getName().toLowerCase() + " ");
             if (nodes.get(k).getPos().substring(0,1).equals("N") && !usedNouns.contains(nodes.get(k))) {
-                pw.println("");
-            } else if (k + 1 == nodes.size()) {
-                pw.println("");
-            }
+                answerList.add(nPhrase);
+                nPhrase = "";
+            } 
+            nPhrase += nodes.get(k).getName().toLowerCase() + " ";
         }
-        pw.flush();
+        return answerList;
     }
 }
