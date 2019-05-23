@@ -24,6 +24,7 @@ import java.util.Set;
  *
  * @author John Didion (jdidion@didion.net)
  * @author <a href="http://autayeu.com/">Aliaksandr Autayeu</a>
+ * @author Edits by Thomas Talasco
  */
 public class Wordnet {
 
@@ -55,6 +56,13 @@ public class Wordnet {
     private IndexWord CAT;
     private IndexWord FUNNY;
     private IndexWord DROLL;
+    private IndexWord TEACHER;
+    private IndexWord TEACHERS;
+    private IndexWord CAR;
+    private IndexWord PUPPY;
+    private IndexWord TEACHERPOS;
+    private IndexWord QUIZ;
+    private IndexWord QUIZZES;
     private final static String MORPH_PHRASE = "running-away";
     private final Dictionary dictionary;
 
@@ -65,14 +73,25 @@ public class Wordnet {
         CAT = dictionary.lookupIndexWord(POS.NOUN, "cat");
         FUNNY = dictionary.lookupIndexWord(POS.ADJECTIVE, "funny");
         DROLL = dictionary.lookupIndexWord(POS.ADJECTIVE, "droll");
+        TEACHER = dictionary.lookupIndexWord(POS.NOUN, "teacher");
+        TEACHERS = dictionary.lookupIndexWord(POS.NOUN, "teachers");
+        CAR = dictionary.lookupIndexWord(POS.NOUN, "car");
+        PUPPY = dictionary.lookupIndexWord(POS.NOUN, "puppy");
+        TEACHERPOS = dictionary.lookupIndexWord(POS.ADJECTIVE, "teacher's");
+        QUIZ = dictionary.lookupIndexWord(POS.NOUN, "quiz");
+        QUIZZES = dictionary.lookupIndexWord(POS.NOUN, "quizzes");
     }
 
     public void go() throws JWNLException, CloneNotSupportedException {
-        demonstrateMorphologicalAnalysis(MORPH_PHRASE);
+        /*demonstrateMorphologicalAnalysis(MORPH_PHRASE);
         demonstrateListOperation(ACCOMPLISH);
         demonstrateTreeOperation(DOG);
         demonstrateAsymmetricRelationshipOperation(DOG, CAT);
-        demonstrateSymmetricRelationshipOperation(FUNNY, DROLL);
+        demonstrateSymmetricRelationshipOperation(FUNNY, DROLL);*/
+        String word = demonstrateListOperation(TEACHERS);
+        int start = word.indexOf("Words: ") + 7;
+        int end = word.indexOf(" --");
+        System.out.println(word.substring(start, end));
     }
 
     private void demonstrateMorphologicalAnalysis(String phrase) throws JWNLException {
@@ -84,11 +103,11 @@ public class Wordnet {
                 dictionary.lookupIndexWord(POS.VERB, phrase));
     }
 
-    private void demonstrateListOperation(IndexWord word) throws JWNLException {
+    private String demonstrateListOperation(IndexWord word) throws JWNLException {
         // Get all of the hypernyms (parents) of the first sense of <var>word</var>
         PointerTargetNodeList hypernyms = PointerUtils.getDirectHypernyms(word.getSenses().get(0));
         System.out.println("Direct hypernyms of \"" + word.getLemma() + "\":");
-        hypernyms.print();
+        return hypernyms.toString();
     }
 
     private void demonstrateTreeOperation(IndexWord word) throws JWNLException {
