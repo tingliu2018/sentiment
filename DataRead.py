@@ -2,7 +2,7 @@
 import pandas as pd
 import math
 """
-@author Thomas Talasco
+@author Thomas Talasco, Yuwei Chen
 """
 
 def binarySearch(arr, size, word):
@@ -10,18 +10,19 @@ def binarySearch(arr, size, word):
     R = size - 1
     while L <= R:
         mid = math.floor((L + R) / 2)
+        arr[mid] = str(arr[mid])
         if arr[mid] < word:
             L = mid + 1
         elif arr[mid] > word:
             R = mid - 1
         else:
-            return mid
+            return int(mid)
     return -1
     
 def linearSearch(arr, word):
     for i in range(0, len(arr)):
         if arr[i] == word:
-            return i
+            return int(i)
     return -1
         
 
@@ -32,12 +33,13 @@ valence = pdData.Valence
 arousal = pdData.Arousal
 dominance = pdData.Dominance
 
+tag = "FIRST PART OF FILE NAME GOES HERE"
 wordSetCount = [0 for i in range(20007)]# Count of words in pandas dataset
 unknownWords = list()
 unknownWordsCount = list()
-file = open('testfile.txt', 'r') # open some file to read
-outputKnown = open('outputKnown.txt', 'w') #output files for words
-outputUnknown = open('outputUnknown.txt', 'w')
+file = open(tag +'Tags.txt', 'r', encoding="utf8") # open some file to read
+outputKnown = open(tag +'OutputKnown.txt', 'w') #output files for words
+outputUnknown = open(tag +'OutputUnknown.txt', 'w')
 
 wordList = list() #creates list 
 text = file.readlines()
@@ -59,7 +61,8 @@ for line in text:
  indices so that we keep both lists aligned correctly.
 '''
 for word in wordList:
-    returnVal = binarySearch(wordData, len(wordData), word)
+    word = str(word) # Force string type
+    returnVal = binarySearch(wordData.tolist(), len(wordData), word)
     if returnVal != -1:
         wordSetCount[returnVal] += 1
     else:
@@ -72,19 +75,13 @@ for word in wordList:
 
 i = 0
 for word in wordData:
-    outputKnown.write(word +" "+ str(wordSetCount[i]) +"\n")
+    outputKnown.write(str(word) +" "+ str(wordSetCount[i]) +"\n")
     i += 1
     
 i = 0
 for word in unknownWords:
-    outputUnknown.write(word + " "+ str(unknownWordsCount[i]) +"\n")
+    outputUnknown.write(str(word) + " "+ str(unknownWordsCount[i]) +"\n")
     i += 1
                 
 outputKnown.close()
-outputUnknown.close()
-            
-        
-    
-
-    
-    
+outputUnknown.close() 
