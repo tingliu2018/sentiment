@@ -9,7 +9,7 @@ def binarySearch(arr, size, word):
     L = 0
     R = size - 1
     while L <= R:
-        mid = math.floor((L + R) / 2)
+        mid = int(math.floor((L + R) / 2))
         arr[mid] = str(arr[mid])
         if arr[mid] < word:
             L = mid + 1
