@@ -36,6 +36,9 @@ public class FrequencyFinder {
         };
 
         String[] outputStrings = new String[5];
+        for (int i = 0; i < outputStrings.length; i++) {
+            outputStrings[i] = "";
+        }
 
         double percentage = 0.8;
         //read in the files into the arraylist
@@ -45,7 +48,7 @@ public class FrequencyFinder {
         }
 
         for (int i = 0; i < totalWords.size(); i++) {
-            totalWords.get(i).setCount((int) (totalWords.get(i).getCount() * 0.8));
+            totalWords.get(i).setCount((int) (totalWords.get(i).getCount() * percentage));
         }
 
         //get each list from the array
@@ -55,9 +58,9 @@ public class FrequencyFinder {
             for (int i = 1; i < currentList.size(); i++) {
                 //linear search of totalwords
                 for (int k = 0; k < ratingsLists.length; k++) {
-                    if (currentList.get(i).getWord().equals(totalWords.get(k))) {
+                    if (currentList.get(i).getWord().equals(totalWords.get(k).getWord())) {
                         if (currentList.get(i).getCount() >= totalWords.get(k).getCount()) {
-                            outputStrings[j] += currentList.get(i).getWord() + " " + currentList.get(i).getCount() + " " + totalWords.get(k).getCount() * 1.25 + "\n";
+                            outputStrings[j] += currentList.get(i).getWord() + " " + currentList.get(i).getCount() + " " + totalWords.get(k).getCount() * (1/percentage) + "\n";
                         }
                     }
                 }
@@ -70,10 +73,11 @@ public class FrequencyFinder {
             new File("/media/thomas/ESD-USB/Frequency/UnknownGood.txt"),
             new File("/media/thomas/ESD-USB/Frequency/UnknownPoor.txt")};
 
-        PrintWriter p = new PrintWriter("");
+        PrintWriter p = null;
 
         for (int i = 0; i < outputFiles.length; i++) {
             p = new PrintWriter(outputFiles[i]);
+            System.out.println(outputStrings[i]);
             p.print(outputStrings[i]);
             p.flush();
         }
