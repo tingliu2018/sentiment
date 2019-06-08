@@ -71,7 +71,7 @@ public class SynsetWriter {
             avg = sum / count;
             condensedList.add(new Word(wordList.get(i).getWord(), avg));
             condensedList.get(condensedList.size() - 1).setParent(wordList.get(i).getParent());
-            i++;
+            i = j;
         }
 
         for (Word word : condensedList) {
