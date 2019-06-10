@@ -53,20 +53,24 @@ public class SynsetWriter {
         Collections.sort(wordList);
         
         for(Word word : wordList){
-            //System.out.println(word.getWord());
+            if(word.getWord().endsWith(" ")){
+                word.setWord(word.getWord().substring(0, word.getWord().length()-1));
+            }
         }
 
         ArrayList<Word> condensedList = new ArrayList<Word>();
         int i = 0, j, count;
         double sum, avg;
         while (i < wordList.size()) {
-            j = i;
+            j = i+1;
             sum = 0;
             count = 1;
-            while (j < wordList.size() && wordList.get(j).equals(wordList.get(i))) {
+            System.out.println(wordList.get(i).getWord());
+            while (j < wordList.size() && wordList.get(j).getWord().equals(wordList.get(i).getWord())) {
                 sum += wordList.get(j).getScore();
-                j++;
                 count++;
+                System.out.println("\t"+ wordList.get(j).getWord() +" "+ count);
+                j++;
             }
             avg = sum / count;
             condensedList.add(new Word(wordList.get(i).getWord(), avg));
@@ -74,11 +78,13 @@ public class SynsetWriter {
             i = j;
         }
 
+        /*
         for (Word word : condensedList) {
             if(word.getScore() != word.getParent().getScore()){
             System.out.println(word.getParent().getWord() + " " + word.getParent().getScore() + " :Syn Word: " + word.getWord() + " " + word.getScore());
             }
         }
+*/
 
     }
 }
