@@ -1281,6 +1281,45 @@ public class Wordnet implements Serializable {
 
         return list;
     }
+    
+    /**
+     * Get all antonyms of given word
+     * @param word String word
+     * @return List of Antonyms
+     */
+    public ArrayList getAntonyms(String word) {
+        ArrayList list = new ArrayList();
+        try {
+            PointerTargetNodeList antonym;
+            IndexWordSet iws = lookupAllIndexWords(word);
+            IndexWord[] iw_array = iws.getIndexWordArray();
+
+            for (IndexWord iw : iw_array) {
+                Synset[] synsets = iw.getSenses();
+                for (Synset synset : synsets) {
+                    System.out.println("synset: " + synset);
+                    antonym = pu_.getAntonyms(synset);
+                    if (antonym == null) {
+                        continue;
+                    }
+//                    System.out.println("derived: " + derived);
+Set set = getLemmas(antonym);
+if (set != null) {
+    list.addAll(set);
+}
+                } //no more than the first 2 senses
+            }
+
+        } catch (JWNLException e) {
+            e.printStackTrace();
+            list.clear();
+        } catch (Exception ie) {
+            ie.printStackTrace();
+            //System.out.println(ie);
+        }
+
+        return list;
+    }
 
     public ArrayList getLemmas(String word, String pos) {
 
