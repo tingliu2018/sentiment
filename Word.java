@@ -7,12 +7,13 @@ public class Word implements Comparable {
 
     protected String word = null;
     protected double count = -1;
-    protected double AverageCount = 0;
-    protected double AwesomeCount = 0;
-    protected double AwfulCount = 0;
-    protected double GoodCount = 0;
-    protected double PoorCount = 0;
+    protected double averageCount = 0;
+    protected double awesomeCount = 0;
+    protected double awfulCount = 0;
+    protected double goodCount = 0;
+    protected double poorCount = 0;
     protected double score = -1;
+    protected double lexScore = -1;
     protected Word parent = null;
 
     /**
@@ -50,6 +51,18 @@ public class Word implements Comparable {
         this.score = parent.getScore();
         this.parent = parent;
     }
+    
+    /**
+     * Word object for when there is more than one score
+     * @param word Word string
+     * @param score Our Score which we generated previously
+     * @param lexScore Lexicon Score
+     */
+    public Word(String word, double score, double lexScore) {
+        this.word = word;
+        this.score = score;
+        this.lexScore = lexScore;
+    }
 
     public String getWord() throws NullPointerException {
         if (word == null) {
@@ -72,43 +85,43 @@ public class Word implements Comparable {
     }
 
     public double getAverageCount() {
-        return AverageCount;
+        return averageCount;
     }
 
-    public void setAverageCount(double AverageCount) {
-        this.AverageCount = AverageCount;
+    public void setAverageCount(double averageCount) {
+        this.averageCount = averageCount;
     }
 
     public double getAwesomeCount() {
-        return AwesomeCount;
+        return awesomeCount;
     }
 
-    public void setAwesomeCount(double AwesomeCount) {
-        this.AwesomeCount = AwesomeCount;
+    public void setAwesomeCount(double awesomeCount) {
+        this.awesomeCount = awesomeCount;
     }
 
     public double getAwfulCount() {
-        return AwfulCount;
+        return awfulCount;
     }
 
-    public void setAwfulCount(double AwfulCount) {
-        this.AwfulCount = AwfulCount;
+    public void setAwfulCount(double awfulCount) {
+        this.awfulCount = awfulCount;
     }
 
     public double getGoodCount() {
-        return GoodCount;
+        return goodCount;
     }
 
-    public void setGoodCount(double GoodCount) {
-        this.GoodCount = GoodCount;
+    public void setGoodCount(double goodCount) {
+        this.goodCount = goodCount;
     }
 
     public double getPoorCount() {
-        return PoorCount;
+        return poorCount;
     }
 
-    public void setPoorCount(double PoorCount) {
-        this.PoorCount = PoorCount;
+    public void setPoorCount(double poorCount) {
+        this.poorCount = poorCount;
     }
 
     public double getScore() {
@@ -129,6 +142,18 @@ public class Word implements Comparable {
 
     public void setParent(Word parent) {
         this.parent = parent;
+    }
+
+    public double getLexScore() {
+        return lexScore;
+    }
+
+    public void setLexScore(double lexScore) {
+        this.lexScore = lexScore;
+    }
+    
+    public double getTotalCount(){
+        return awesomeCount + goodCount + averageCount + poorCount + awfulCount; 
     }
 
     @Override

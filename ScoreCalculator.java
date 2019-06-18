@@ -12,6 +12,9 @@ import java.util.Scanner;
  */
 public class ScoreCalculator {
 
+    protected static final double FILTER = 10.0;
+
+    protected static ArrayList<Word> totalWords = new ArrayList<Word>();
     public static void main(String[] args) throws FileNotFoundException {
 
         /* Old array
@@ -21,17 +24,13 @@ public class ScoreCalculator {
             new File("/media/thomas/ESD-USB/Combined Files/UnknownAwful.txt"),
             new File("/media/thomas/ESD-USB/Combined Files/UnknownGood.txt"),
             new File("/media/thomas/ESD-USB/Combined Files/UnknownPoor.txt")};
-        */
-        
-        
+         */
         File[] files = {
             new File("/media/thomas/ESD-USB/Combined Files/KnownAverage.txt"),
             new File("/media/thomas/ESD-USB/Combined Files/KnownAwesome.txt"),
             new File("/media/thomas/ESD-USB/Combined Files/KnownAwful.txt"),
             new File("/media/thomas/ESD-USB/Combined Files/KnownGood.txt"),
             new File("/media/thomas/ESD-USB/Combined Files/KnownPoor.txt")};
-
-        ArrayList<Word> totalWords = new ArrayList<Word>();
 
         ArrayList[] ratingsLists = {
             new ArrayList<Word>(),
@@ -48,9 +47,9 @@ public class ScoreCalculator {
             File file = files[i];
             totalWords = parseFile(file, totalWords, ratingsLists[i]);
         }
-
+        
         //get each list from the array    
-        double scale = Math.pow(10, 4);
+        double scale = Math.pow(10, 3);
         for (int j = 0; j < totalWords.size(); j++) {
             double score = (totalWords.get(j).getAwesomeCount() * 0.9
                     + totalWords.get(j).getGoodCount() * 0.7
@@ -58,10 +57,12 @@ public class ScoreCalculator {
                     + totalWords.get(j).getPoorCount() * 0.3
                     + totalWords.get(j).getAwfulCount() * 0.1) / totalWords.get(j).getCount();
             score = Math.round(score * scale) / scale;
-            outputString += totalWords.get(j).getWord() + " " + score + "\n";
+            if (totalWords.get(j).getTotalCount() >= FILTER && score > 0) {
+                outputString += totalWords.get(j).getWord() + " " + score + "\n";
+            }
         }
 
-        File outputFile = new File("/media/thomas/ESD-USB/Scores/Scores.txt");
+        File outputFile = new File("/media/thomas/ESD-USB/newFiles/Scores.txt");
 
         PrintWriter p = new PrintWriter(outputFile);
         p.print(outputString);
@@ -69,14 +70,18 @@ public class ScoreCalculator {
     }
 
     /**
-     * Updates totalwords by increasing the counts of the number of times a word was seen in a particular file
+     * Updates totalwords by increasing the counts of the number of times a word
+     * was seen in a particular file
+     *
      * @param totalWords List of all words seen
      * @param file Current file being read
-     * @param lineSplit Array of the line most recently read from the file that splits along spaces
+     * @param lineSplit Array of the line most recently read from the file that
+     * splits along spaces
      * @param index The index of the object we're updating in totalWords
-     * @return Updated totalWords list such that all counts are updated for file specificity
+     * @return Updated totalWords list such that all counts are updated for file
+     * specificity
      */
-    public static ArrayList<Word> adjustCounts(ArrayList<Word> totalWords, File file, String[] lineSplit,int index) {
+    public static ArrayList<Word> adjustCounts(ArrayList<Word> totalWords, File file, String[] lineSplit, int index) {
         switch (file.getName()) {
             case "UnknownAverage.txt":
             case "KnownAverage.txt":
@@ -88,7 +93,7 @@ public class ScoreCalculator {
                 break;
             case "UnknownAwful.txt":
             case "KnownAwful.txt":
-                totalWords.get(index).setAwfulCount(Integer.parseInt(lineSplit[lineSplit.length - 1])); 
+                totalWords.get(index).setAwfulCount(Integer.parseInt(lineSplit[lineSplit.length - 1]));
                 break;
             case "UnknownGood.txt":
             case "KnownGood.txt":
@@ -106,11 +111,12 @@ public class ScoreCalculator {
 
     /**
      * Reads through a file and adds to the list of all words seen
+     *
      * @param file File being read
      * @param totalWords List of words seen across all files
      * @param ratingWords List of words specific to the current file
-     * @return An updated Total Words list with word counts updated and new words added
-     * @throws FileNotFoundException 
+     * @return An updated Total Words list with word
+     * @throws FileNotFoundException
      */
     public static ArrayList<Word> parseFile(File file, ArrayList<Word> totalWords, ArrayList<Word> ratingWords) throws FileNotFoundException {
         Scanner sc = new Scanner(file);
@@ -126,28 +132,27 @@ public class ScoreCalculator {
                     if (word.equals(totalWords.get(i).getWord())) {
                         totalWords.get(i).setCount(totalWords.get(i).getCount() + Integer.parseInt(lineSplit[lineSplit.length - 1]));
                         flag = true;
-                        adjustCounts(totalWords, file, lineSplit,i);
+                        adjustCounts(totalWords, file, lineSplit, i);
                     }
                 }
                 if (!flag) {
                     totalWords.add(new Word(word, Integer.parseInt(lineSplit[lineSplit.length - 1])));
-                    adjustCounts(totalWords, file, lineSplit,totalWords.size()-1);
+                    adjustCounts(totalWords, file, lineSplit, totalWords.size() - 1);
                 }
                 ratingWords.add(new Word(word, Integer.parseInt(lineSplit[lineSplit.length - 1])));
             } else {
-
                 boolean flag = false;
                 //addings to the totalWords
                 for (int i = 0; i < totalWords.size(); i++) {
                     if (lineSplit[0].equals(totalWords.get(i).getWord())) {
                         totalWords.get(i).setCount(totalWords.get(i).getCount() + Integer.parseInt(lineSplit[lineSplit.length - 1]));
                         flag = true;
-                        adjustCounts(totalWords, file, lineSplit,i);
+                        adjustCounts(totalWords, file, lineSplit, i);
                     }
                 }
                 if (!flag) {
                     totalWords.add(new Word(lineSplit[0], Integer.parseInt(lineSplit[lineSplit.length - 1])));
-                    adjustCounts(totalWords, file, lineSplit,totalWords.size()-1);
+                    adjustCounts(totalWords, file, lineSplit, totalWords.size() - 1);
                 }
                 ratingWords.add(new Word(lineSplit[0], Integer.parseInt(lineSplit[lineSplit.length - 1])));
             }

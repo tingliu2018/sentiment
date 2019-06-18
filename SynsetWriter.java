@@ -19,7 +19,8 @@ public class SynsetWriter {
 
     public static void main(String[] args) throws FileNotFoundException, JWNLException {
         BasicConfigurator.configure();
-        File inputFile = new File("/home/thomas/Desktop/UnknownScores.txt");
+        //File inputFile = new File("/home/thomas/Desktop/UnknownScores.txt");
+        File inputFile = new File("/home/thomas/Desktop/KnownScores.txt");
         Scanner sc = new Scanner(inputFile);
         ArrayList<Word> synonymList = new ArrayList<Word>();
         ArrayList<Word> antonymList = new ArrayList<Word>();
@@ -46,11 +47,16 @@ public class SynsetWriter {
                 //Grab all of the strings of words out of the synset.
                 String synString = iWord.getSenses().toString();
                 ArrayList antonyms = new ArrayList();
+                ArrayList synonyms = new ArrayList();
                 antonyms = net.getAntonyms(word);
+                synonyms = net.getSynonym(word, iWord.getPOS().toString().toLowerCase());
                 String[] words = synString.substring(synString.indexOf("Words: ") + 7, synString.indexOf("--")).split(", ");
-                for (String currentWord : words) {
+                /* for (String currentWord : words) {
                     //Create new word objects and store them in the list with the parent word as an arg
                     synonymList.add(new Word(currentWord, new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
+                } */
+                for (Object obj : synonyms) {
+                    synonymList.add(new Word(obj.toString(), new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
                 }
                 for (Object obj : antonyms) {
                     antonymList.add(new Word(obj.toString(), new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
