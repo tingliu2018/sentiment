@@ -50,9 +50,11 @@ public class BadWordFinder {
         sc.close();
 
         for (int i = 0; i < ourWords.size(); i++) {
-            int index = binarySearch(lexWords, 0, lexWords.size(), ourWords.get(i));
-            if ((ourWords.get(i).getScore() > .7 ^ lexWords.get(i).getScore() > .7) || (ourWords.get(i).getScore() > .3 ^ lexWords.get(i).getScore() > .3)) {
-                badWords.add(new Word(ourWords.get(i).getWord(), ourWords.get(i).getScore(), lexWords.get(i).getScore()));
+            int index = linearSearch(lexWords, ourWords.get(i));
+            if(index != -1){
+                if ((ourWords.get(i).getScore() > .7 ^ lexWords.get(index).getScore() > .7) || (ourWords.get(i).getScore() > .3 ^ lexWords.get(index).getScore() > .3)) {
+                    badWords.add(new Word(ourWords.get(i).getWord(), ourWords.get(i).getScore(), lexWords.get(index).getScore()));
+                }
             }
         }
 
@@ -109,32 +111,6 @@ public class BadWordFinder {
                 return i;
             }
         }
-        return -1;
-    }
-
-    public static int binarySearch(ArrayList<Word> list, int l, int r, Word searchWord) {
-        if (r >= l) {
-            int mid = l + (r - l) / 2;
-
-            // If the element is present at the 
-            // middle itself 
-            if (list.get(mid).getWord().equals(searchWord.getWord())) {
-                return mid;
-            }
-
-            // If element is smaller than mid, then 
-            // it can only be present in left subarray 
-            if (list.get(mid).getWord().compareTo(searchWord.getWord()) > 0) {
-                return binarySearch(list, l, mid - 1, searchWord);
-            }
-
-            // Else the element can only be present 
-            // in right subarray 
-            return binarySearch(list, mid + 1, r, searchWord);
-        }
-
-        // We reach here when element is not present 
-        // in array 
         return -1;
     }
 
