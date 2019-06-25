@@ -2,6 +2,7 @@ package parsertest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -19,8 +20,8 @@ public class SynsetWriter {
 
     public static void main(String[] args) throws FileNotFoundException, JWNLException {
         BasicConfigurator.configure();
-        //File inputFile = new File("/home/thomas/Desktop/UnknownScores.txt");
-        File inputFile = new File("/home/thomas/Desktop/KnownScores.txt");
+        File inputFile = new File("/media/thomas/ESD-USB/Synset/Unknown.txt");
+        //File inputFile = new File("/home/thomas/Desktop/Known.txt");
         Scanner sc = new Scanner(inputFile);
         ArrayList<Word> synonymList = new ArrayList<Word>();
         ArrayList<Word> antonymList = new ArrayList<Word>();
@@ -31,16 +32,8 @@ public class SynsetWriter {
             //Look up word as various parts of speech
             String[] lineSplit = sc.nextLine().split(" ");
             String word = lineSplit[0];
-            IndexWord iWord = dictionary.getIndexWord(POS.NOUN, word);
-            if (iWord == null) {
-                iWord = dictionary.getIndexWord(POS.VERB, word);
-                if (iWord == null) {
-                    iWord = dictionary.getIndexWord(POS.ADJECTIVE, word);
-                    if (iWord == null) {
-                        iWord = dictionary.getIndexWord(POS.ADVERB, word);
-                    }
-                }
-            }
+            IndexWord iWord = dictionary.getIndexWord(POS.ADVERB, word);
+            
             if (iWord != null && Double.parseDouble(lineSplit[1]) != 0.1) {
                 //System.out.println(word +": "+ net.getSynonym(word, iWord.getPOS().toString()));
                 //System.out.println(word +": "+ net.getDerived(word));
@@ -108,6 +101,14 @@ public class SynsetWriter {
                 sharedWords.add(word);
             }
         }
+        
+        System.out.println("Total Syn "+ condensedSynList.size());
+        System.out.println("Total Ant "+ condensedAntList.size());
+        System.out.println("Naughty Words "+ sharedWords.size());
+        
+        printToFile(condensedSynList, "AdverbSyn.txt");
+        printToFile(condensedSynList, "AdverbAnt.txt");
+        printToFile(condensedSynList, "AdverbOverlap.txt");
 
     }
 
@@ -166,5 +167,14 @@ public class SynsetWriter {
         // We reach here when element is not present 
         // in array 
         return -1; 
-    } 
+    }
+    
+    public static void printToFile(ArrayList<Word> words, String filename) throws FileNotFoundException{
+        File file = new File("/media/thomas/ESD-USB/Synset/"+ filename);
+        PrintWriter p = new PrintWriter(file);
+        for(Word word : words){
+            p.println(word.getWord() +" "+ word.getScore());
+        }
+        p.close();
+    }
 }
