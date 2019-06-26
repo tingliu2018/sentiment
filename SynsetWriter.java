@@ -49,10 +49,10 @@ public class SynsetWriter {
                     synonymList.add(new Word(currentWord, new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
                 } */
                 for (Object obj : synonyms) {
-                    synonymList.add(new Word(obj.toString(), new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
+                    synonymList.add(new Word(obj.toString().toLowerCase(), new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
                 }
                 for (Object obj : antonyms) {
-                    antonymList.add(new Word(obj.toString(), new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
+                    antonymList.add(new Word(obj.toString().toLowerCase(), new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
                 }
             } else {
                 //System.out.println("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!");
@@ -107,8 +107,8 @@ public class SynsetWriter {
         System.out.println("Naughty Words "+ sharedWords.size());
         
         printToFile(condensedSynList, "AdverbSyn.txt");
-        printToFile(condensedSynList, "AdverbAnt.txt");
-        printToFile(condensedSynList, "AdverbOverlap.txt");
+        printToFile(condensedAntList, "AdverbAnt.txt");
+        printToFile(sharedWords, "AdverbOverlap.txt");
 
     }
 
