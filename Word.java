@@ -173,4 +173,10 @@ public class Word implements Comparable {
         Word compareWord = (Word) obj;
         return this.word.compareTo(compareWord.getWord());
     }
+    
+    @Override
+    public boolean equals(Object obj){
+        Word compareWord = (Word) obj;
+        return this.word.equals(compareWord.getWord());
+    }
 }
