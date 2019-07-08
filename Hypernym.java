@@ -30,16 +30,16 @@ public class Hypernym {
         ArrayList<IndexWord> unknownWords = new ArrayList<IndexWord>();
         ArrayList<Integer> unknownWordsCount = new ArrayList<Integer>();
         try {
+            String tag = "MalePoor";
             String unknownOutputText = "";
             Dictionary dictionary = Dictionary.getDefaultResourceInstance();
-            File knownFile = new File("PUT A FILE PATH HERE");
+            File knownFile = new File("/media/thomas/ESD-USB/Ouputs/"+ tag +"OutputKnown.txt");
             Scanner reader = new Scanner(knownFile);
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
                 if (!line.equals("")) {
                     StringBuffer problemFixer = new StringBuffer(line);
                     problemFixer.reverse();
-                    //System.out.println(problemFixer);
                     int index = line.length() - problemFixer.indexOf(" ");
                     int count = Integer.parseInt(line.substring(index, line.length()));
                     String word = line.substring(0, index);
@@ -60,11 +60,12 @@ public class Hypernym {
                     }
                 }
             }
-            File unknownFile = new File("PUT A FILE PATH HERE");
+            File unknownFile = new File("/media/thomas/ESD-USB/Ouputs/"+ tag +"OutputUnknown.txt");
             reader = new Scanner(unknownFile);
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
                 String[] lineSplit = line.split(" ");
+                //System.out.println(line);
                 IndexWord word = dictionary.getIndexWord(POS.NOUN, lineSplit[0]);
                 if (word == null) {
                     word = dictionary.getIndexWord(POS.VERB, lineSplit[0]);
@@ -77,19 +78,29 @@ public class Hypernym {
                     }
                 }
                 if (word != null) {
+                    if(lineSplit.length >= 2){
                     unknownWords.add(word);
+                    //System.out.println(lineSplit[0].toString());
                     unknownWordsCount.add(Integer.parseInt(lineSplit[1]));
+                    } else {
+                        for (int i = 0; i < lineSplit.length; i++) {
+                            String string = lineSplit[i];
+                            System.out.println(string);
+                        }
+                    }
                 }
             }
             int j = 0;
             boolean flag = false;
             for (IndexWord word : unknownWords) {
+                //System.out.println(word.getLemma());
                 //System.out.println(unknownWords.toString());
                 if (word.getLemma() != null && !word.getLemma().equals("")) {
                     int i = 0;
                     for (IndexWord searchWord : knownWords) {
                         if (searchWord != null) {
                             if (word.getLemma().equals(searchWord.getLemma())) {
+                                //System.out.println(" matches "+ searchWord.getLemma());
                                 knownWordsCount.set(i, knownWordsCount.get(i) + unknownWordsCount.get(j));
                                 flag = true;
                                 break;
@@ -98,7 +109,7 @@ public class Hypernym {
                         i++;
                     }
                     if (flag == false) {
-                        unknownOutputText += unknownWords.get(j).getLemma() + ": " + unknownWordsCount.get(j) + "\n";
+                        unknownOutputText += unknownWords.get(j).getLemma() + " " + unknownWordsCount.get(j) + "\n";
                     } else {
                         flag = false;
                     }
@@ -106,10 +117,11 @@ public class Hypernym {
                 j++;
             }
 
-            PrintWriter pw = new PrintWriter("PUT A FILE PATH HERE");
+            PrintWriter pw = new PrintWriter("/media/thomas/ESD-USB/Need Score/"+ tag +"UnknownOutput.txt");
+            unknownOutputText = unknownOutputText.substring(0, unknownOutputText.length()-1);
             pw.println(unknownOutputText);
             pw.flush();
-            pw = new PrintWriter("PUT A FILE PATH HERE");
+            pw = new PrintWriter("/media/thomas/ESD-USB/Need Score/"+ tag +"KnownOutput.txt");
             int i = 0;
             for (IndexWord word : knownWords) {
                 pw.println(word.getLemma() + " " + knownWordsCount.get(i));

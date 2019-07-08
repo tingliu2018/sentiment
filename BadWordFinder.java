@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import net.sf.extjwnl.JWNLException;
+import net.sf.extjwnl.data.IndexWord;
+import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.dictionary.Dictionary;
 
 /**
  *
@@ -12,7 +16,7 @@ import java.util.Scanner;
  */
 public class BadWordFinder {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, JWNLException {
 
         File[] countFiles = {
             new File("/media/thomas/ESD-USB/Combined Files/KnownAwesome.txt"),
@@ -20,16 +24,16 @@ public class BadWordFinder {
             new File("/media/thomas/ESD-USB/Combined Files/KnownAverage.txt"),
             new File("/media/thomas/ESD-USB/Combined Files/KnownPoor.txt"),
             new File("/media/thomas/ESD-USB/Combined Files/KnownAwful.txt")
-            };
+        };
 
         File ourScores = new File("/media/thomas/ESD-USB/newFiles/Scores.txt");
         File lexiconScores = new File("/media/thomas/ESD-USB/newFiles/valenceScores.txt");
-        File output = new File("/media/thomas/ESD-USB/newFiles/badWords.txt");
 
         ArrayList<Word> ourWords = new ArrayList();
         ArrayList<Word> lexWords = new ArrayList();
         ArrayList<Word> badWords = new ArrayList();
         ArrayList<Word> countedWords = new ArrayList();
+        Dictionary dictionary = Dictionary.getDefaultResourceInstance();
 
         Scanner sc = new Scanner(ourScores);
         while (sc.hasNextLine()) {
@@ -51,9 +55,18 @@ public class BadWordFinder {
 
         for (int i = 0; i < ourWords.size(); i++) {
             int index = linearSearch(lexWords, ourWords.get(i));
-            if(index != -1){
-                if ((ourWords.get(i).getScore() > .7 ^ lexWords.get(index).getScore() > .7) || (ourWords.get(i).getScore() > .3 ^ lexWords.get(index).getScore() > .3)) {
-                    badWords.add(new Word(ourWords.get(i).getWord(), ourWords.get(i).getScore(), lexWords.get(index).getScore()));
+            if (index != -1) {
+                IndexWord iWord = dictionary.getIndexWord(POS.ADVERB, ourWords.get(i).getWord());
+                if (iWord != null) {
+                    if (ourWords.get(i).getScore() >= 0.7 && lexWords.get(index).getScore() >= 0.7) {
+                        badWords.add(new Word(ourWords.get(i).getWord(), ourWords.get(i).getScore(), lexWords.get(index).getScore()));
+                    }
+                    if (ourWords.get(i).getScore() <= 0.3 && lexWords.get(index).getScore() <= 0.3) {
+                        badWords.add(new Word(ourWords.get(i).getWord(), ourWords.get(i).getScore(), lexWords.get(index).getScore()));
+                    } else if (Math.abs(ourWords.get(i).getScore() - lexWords.get(index).getScore()) <= 0.1) {
+                        badWords.add(new Word(ourWords.get(i).getWord(), ourWords.get(i).getScore(), lexWords.get(index).getScore()));
+                    }
+                    //badWords.add(new Word(ourWords.get(i).getWord(), ourWords.get(i).getScore(), lexWords.get(index).getScore()));
                 }
             }
         }
@@ -65,7 +78,7 @@ public class BadWordFinder {
                 String line = sc.nextLine();
                 String[] lineSplit = line.split(" ");
                 countedWords.add(new Word(lineSplit[0], 0.0));
-                countedWords.get(countedWords.size()-1).setCount(Double.parseDouble(lineSplit[lineSplit.length-1]));
+                countedWords.get(countedWords.size() - 1).setCount(Double.parseDouble(lineSplit[lineSplit.length - 1]));
             }
             for (Word word : badWords) {
                 int index = linearSearch(countedWords, word);
@@ -91,27 +104,27 @@ public class BadWordFinder {
                             break;
                     }
                 } else {
-                    System.out.println(word.getWord() +" NOT FOUND!");
+                    System.out.println(word.getWord() + " NOT FOUND!");
                 }
             }
             countedWords.clear();
-
         }
 
-        PrintWriter p = new PrintWriter("/media/thomas/ESD-USB/newFiles/badWords.txt");
+        PrintWriter p = new PrintWriter("/media/thomas/ESD-USB/newFiles/goodAdverbWords.csv");
         p.println("Word\tOur Score\tLex Score\tTotal Count\tAwesome Count\tGood Count\tAverage Count\tPoor Count\tAwful Count");
         for (Word word : badWords) {
             p.println(word.getWord() + "\t" + word.getScore() + "\t" + word.getLexScore() + "\t" + word.getTotalCount() + "\t" + word.getAwesomeCount() + "\t" + word.getGoodCount() + "\t" + word.getAverageCount() + "\t" + word.getPoorCount() + "\t" + word.getAwfulCount());
         }
+
+        p.close();
     }
-    
-    public static int linearSearch(ArrayList<Word> list, Word searchWord){
+
+    public static int linearSearch(ArrayList<Word> list, Word searchWord) {
         for (int i = 0; i < list.size(); i++) {
-            if(list.get(i).getWord().equals(searchWord.getWord())){
+            if (list.get(i).getWord().equals(searchWord.getWord())) {
                 return i;
             }
         }
         return -1;
     }
-
 }

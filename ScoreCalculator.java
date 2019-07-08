@@ -12,7 +12,7 @@ import java.util.Scanner;
  */
 public class ScoreCalculator {
 
-    protected static final double FILTER = 10.0;
+    protected static final double FILTER = 100.0;
 
     protected static ArrayList<Word> totalWords = new ArrayList<Word>();
     public static void main(String[] args) throws FileNotFoundException {

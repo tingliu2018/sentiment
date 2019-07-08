@@ -735,7 +735,7 @@ public class Wordnet implements Serializable {
                 }
                 //System.out.println("flag");
                 Synset[] synsets = iw.getSenses();
-                for (int i = 0; (i < synsets.length) && (i < 1); i++) //use the first sense
+                for (int i = 0; (i < synsets.length) && (i < 2); i++) //use the first sense
                 {
                     Synset synset = synsets[i];
                     //if (isBadSense(synset)) {
@@ -1294,7 +1294,8 @@ public class Wordnet implements Serializable {
             IndexWordSet iws = lookupAllIndexWords(word);
             IndexWord[] iw_array = iws.getIndexWordArray();
 
-            for (IndexWord iw : iw_array) {
+            for (int j = 0; j < iw_array.length && j < 2; j++) {
+                IndexWord iw = iw_array[j];
                 Synset[] synsets = iw.getSenses();
                 for (Synset synset : synsets) {
                     System.out.println("synset: " + synset);
@@ -1302,7 +1303,6 @@ public class Wordnet implements Serializable {
                     if (antonym == null) {
                         continue;
                     }
-//                    System.out.println("derived: " + derived);
 Set set = getLemmas(antonym);
 if (set != null) {
     list.addAll(set);

@@ -33,11 +33,13 @@ public class LexiconBuilder {
         File adjAnt = new File("/media/thomas/ESD-USB/Synset/Lexicon/AdjectiveAnt.txt");
         File adverbAnt = new File("/media/thomas/ESD-USB/Synset/Lexicon/AdverbSyn.txt");
         File adverbSyn = new File("/media/thomas/ESD-USB/Synset/Lexicon/AdverbAnt.txt");
+        File unknownWords = new File("/media/thomas/ESD-USB/Synset/Unknown/expansionWords.txt");
         
         readFile(adverbSyn);
         readFile(adverbAnt);
         readFile(adjSyn);
         readFile(adjAnt);
+        readFile(unknownWords);
         
         Collections.sort(words);
         

@@ -1,3 +1,5 @@
+package parsertest;
+
 import java.util.Collection;
 import java.util.List;
 import edu.stanford.nlp.process.DocumentPreprocessor;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.apache.log4j.BasicConfigurator;
 
 /**
  * Parses a text file and pulls out noun phrases, if no args given then filepicker forces a choice of txt files for input and output
@@ -20,23 +23,18 @@ public class NounParser {
         try {
             String fileInput = "";
             String fileOutput = "";
-            String parserModel = "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz";
+            BasicConfigurator.configure();
             if (args.length == 0) {
                 JOptionPane.showMessageDialog(null, "Choose file to read");
                 JFileChooser fc = new JFileChooser();
                 int returnVal = fc.showOpenDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                } else {
-                	JOptionPane.showMessageDialog(null, "ERROR: NO FILE SELECTED", "ERROR", JOptionPane.ERROR_MESSAGE);
-                	System.exit(1);
+                    fileInput = fc.getSelectedFile().getAbsolutePath();
                 }
                 JOptionPane.showMessageDialog(null, "Choose file to write to");
                 returnVal = fc.showOpenDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     fileOutput = fc.getSelectedFile().getAbsolutePath();
-                } else {
-                	JOptionPane.showMessageDialog(null, "ERROR: NO FILE SELECTED", "ERROR", JOptionPane.ERROR_MESSAGE);
-                	System.exit(1);
                 }
             } else if(args.length == 2){
                 fileInput = args[0];
@@ -45,6 +43,7 @@ public class NounParser {
                 System.out.println("Requires 0 or 2 Args");
             }
             PrintWriter pw = new PrintWriter(fileOutput);
+            String parserModel = "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz";
             LexicalizedParser lp = LexicalizedParser.loadModel(parserModel);
             TreebankLanguagePack tlp = lp.treebankLanguagePack(); // a PennTreebankLanguagePack for English
             GrammaticalStructureFactory gsf = null;

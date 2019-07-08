@@ -20,30 +20,34 @@ public class SynsetWriter {
 
     public static void main(String[] args) throws FileNotFoundException, JWNLException {
         BasicConfigurator.configure();
-        File inputFile = new File("/media/thomas/ESD-USB/Synset/Unknown.txt");
+        File inputFile = new File("/media/thomas/ESD-USB/Scores.csv");
         //File inputFile = new File("/home/thomas/Desktop/Known.txt");
         Scanner sc = new Scanner(inputFile);
         ArrayList<Word> synonymList = new ArrayList<Word>();
         ArrayList<Word> antonymList = new ArrayList<Word>();
         Dictionary dictionary = Dictionary.getDefaultResourceInstance();
         Wordnet net = new Wordnet();
-
+        
+        File adjFile = new File("/media/thomas/ESD-USB/Synset/Lexicon/Adverb.txt");
+        PrintWriter p = new PrintWriter(adjFile);
+        
         while (sc.hasNextLine()) {
             //Look up word as various parts of speech
-            String[] lineSplit = sc.nextLine().split(" ");
+            String[] lineSplit = sc.nextLine().split(",");
             String word = lineSplit[0];
             IndexWord iWord = dictionary.getIndexWord(POS.ADVERB, word);
-            
+
             if (iWord != null && Double.parseDouble(lineSplit[1]) != 0.1) {
+                p.println(word);
                 //System.out.println(word +": "+ net.getSynonym(word, iWord.getPOS().toString()));
                 //System.out.println(word +": "+ net.getDerived(word));
                 //Grab all of the strings of words out of the synset.
-                String synString = iWord.getSenses().toString();
+                //String synString = iWord.getSenses().toString();
                 ArrayList antonyms = new ArrayList();
                 ArrayList synonyms = new ArrayList();
                 antonyms = net.getAntonyms(word);
                 synonyms = net.getSynonym(word, iWord.getPOS().toString().toLowerCase());
-                String[] words = synString.substring(synString.indexOf("Words: ") + 7, synString.indexOf("--")).split(", ");
+                //String[] words = synString.substring(synString.indexOf("Words: ") + 7, synString.indexOf("--")).split(", ");
                 /* for (String currentWord : words) {
                     //Create new word objects and store them in the list with the parent word as an arg
                     synonymList.add(new Word(currentWord, new Word(lineSplit[0], Double.parseDouble(lineSplit[1]))));
@@ -58,6 +62,8 @@ public class SynsetWriter {
                 //System.out.println("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!");
             }
         }
+        
+        p.close();
 
         // Sort the list
         Collections.sort(synonymList);
@@ -75,7 +81,7 @@ public class SynsetWriter {
                 word.setWord(word.getWord().substring(0, word.getWord().length() - 1));
             }
         }
-        
+
         double scale = Math.pow(10, 3);
         ArrayList<Word> condensedSynList = scoreWords(synonymList);
         ArrayList<Word> condensedAntList = scoreWords(antonymList);
@@ -91,25 +97,24 @@ public class SynsetWriter {
             word.setScore(Math.round(word.getScore() * scale) / scale);
             //System.out.println(word.getParent().getWord() + " " + word.getParent().getScore() + " :Ant Word: " + word.getWord() + " " + word.getScore());
         }
-        
+
         ArrayList<Word> sharedWords = new ArrayList<Word>();
-        
-        for(Word word : condensedSynList){
-            int index = binarySearch(condensedAntList, 0, condensedAntList.size()-1, word);
-            if(index != -1){
-                System.out.println(word.getWord() +" Syn Score: "+ word.getScore() + " Syn Parent: "+ word.getParent().getWord() +" Ant Score: "+ condensedAntList.get(index).getScore() +" Ant Parent: "+ condensedAntList.get(index).getParent().getWord());
+
+        for (Word word : condensedSynList) {
+            int index = binarySearch(condensedAntList, 0, condensedAntList.size() - 1, word);
+            if (index != -1) {
+                //System.out.println(word.getWord() +" Syn Score: "+ word.getScore() + " Syn Parent: "+ word.getParent().getWord() +" Ant Score: "+ condensedAntList.get(index).getScore() +" Ant Parent: "+ condensedAntList.get(index).getParent().getWord());
                 sharedWords.add(word);
             }
         }
-        
-        System.out.println("Total Syn "+ condensedSynList.size());
-        System.out.println("Total Ant "+ condensedAntList.size());
-        System.out.println("Naughty Words "+ sharedWords.size());
-        
+
+        System.out.println("Total Syn " + condensedSynList.size());
+        System.out.println("Total Ant " + condensedAntList.size());
+        System.out.println("Naughty Words " + sharedWords.size());
+
         printToFile(condensedSynList, "AdverbSyn.txt");
         printToFile(condensedAntList, "AdverbAnt.txt");
         printToFile(sharedWords, "AdverbOverlap.txt");
-
     }
 
     /**
@@ -143,37 +148,38 @@ public class SynsetWriter {
         }
         return condensedList;
     }
-    
-    public static int binarySearch(ArrayList<Word> list, int l, int r, Word searchWord) 
-    { 
-        if (r >= l) { 
-            int mid = l + (r - l) / 2; 
-  
+
+    public static int binarySearch(ArrayList<Word> list, int l, int r, Word searchWord) {
+        if (r >= l) {
+            int mid = l + (r - l) / 2;
+
             // If the element is present at the 
             // middle itself 
-            if (list.get(mid).getWord().equals(searchWord.getWord())) 
-                return mid; 
-  
+            if (list.get(mid).getWord().equals(searchWord.getWord())) {
+                return mid;
+            }
+
             // If element is smaller than mid, then 
             // it can only be present in left subarray 
-            if (list.get(mid).getWord().compareTo(searchWord.getWord()) > 0) 
-                return binarySearch(list, l, mid - 1, searchWord); 
-  
+            if (list.get(mid).getWord().compareTo(searchWord.getWord()) > 0) {
+                return binarySearch(list, l, mid - 1, searchWord);
+            }
+
             // Else the element can only be present 
             // in right subarray 
-            return binarySearch(list, mid + 1, r, searchWord); 
-        } 
-  
+            return binarySearch(list, mid + 1, r, searchWord);
+        }
+
         // We reach here when element is not present 
         // in array 
-        return -1; 
+        return -1;
     }
-    
-    public static void printToFile(ArrayList<Word> words, String filename) throws FileNotFoundException{
-        File file = new File("/media/thomas/ESD-USB/Synset/"+ filename);
+
+    public static void printToFile(ArrayList<Word> words, String filename) throws FileNotFoundException {
+        File file = new File("/media/thomas/ESD-USB/Synset/Lexicon/" + filename);
         PrintWriter p = new PrintWriter(file);
-        for(Word word : words){
-            p.println(word.getWord() +" "+ word.getScore());
+        for (Word word : words) {
+            p.println(word.getWord() + " " + word.getScore());
         }
         p.close();
     }

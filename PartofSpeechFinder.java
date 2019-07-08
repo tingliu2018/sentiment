@@ -16,10 +16,11 @@ import net.sf.extjwnl.dictionary.Dictionary;
 public class PartofSpeechFinder {
 
     public static void main(String[] args) throws JWNLException, FileNotFoundException {
-        File lexicon = new File("/media/thomas/ESD-USB/Scores.csv");
+        File lexicon = new File("/media/thomas/ESD-USB/newFiles/Scores.txt");
         Dictionary dictionary = Dictionary.getDefaultResourceInstance();
         Scanner sc = new Scanner(lexicon);
 
+        //Output files
         PrintWriter[] pw = new PrintWriter[4];
         pw[0] = new PrintWriter("/media/thomas/ESD-USB/Parts of Speech/Noun.txt");
         pw[1] = new PrintWriter("/media/thomas/ESD-USB/Parts of Speech/Verb.txt");
@@ -27,11 +28,12 @@ public class PartofSpeechFinder {
         pw[3] = new PrintWriter("/media/thomas/ESD-USB/Parts of Speech/Adverb.txt");
         IndexWord[] iWords = new IndexWord[4];
         
-        sc.nextLine();
+        sc.nextLine(); //Skip header line
 
+        //Lookup all possible POS of a word, print it to the appropriate files
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
-            String word = line.substring(0, line.indexOf(','));
+            String word = line.substring(0, line.indexOf(" "));
             iWords[0] = dictionary.getIndexWord(POS.NOUN, word);
             iWords[1] = dictionary.getIndexWord(POS.VERB, word);
             iWords[2] = dictionary.getIndexWord(POS.ADJECTIVE, word);
