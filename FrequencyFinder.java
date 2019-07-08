@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author thomas
+ * @author Code Monkey B
  */
 public class FrequencyFinder {
 

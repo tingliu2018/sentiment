@@ -15,7 +15,8 @@ import org.apache.log4j.BasicConfigurator;
 /**
  * Parses a text file and pulls out noun phrases, if no args given then filepicker forces a choice of txt files for input and output
  * If 2 args then first arg Input text file, second arg output text file
- * @author Thomas Talasco, Yuwei Chen
+ * @author Code Monkey A
+ * @author Code Monkey B
  */
 public class NounParser {
 

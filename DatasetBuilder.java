@@ -12,15 +12,21 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- *
- * @author Thomas Talasco
+ * Builds all the dataset files with the exception of STree and SOStr which must be made manually by replacing spaces with |
+ * in parents.txt and in the masterFile
+ * @author Code Monkey A
  */
 public class DatasetBuilder {
-    
+    /*
+    MY DIRECTORY: /media/codemonkey/ESD-USB/dataset/
+    */
+    /*
+    Number of randomly chosen comments
+    */
     protected static final int NUMCOMMENTS = 1000;
     
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        File lexicon = new File("/media/thomas/ESD-USB/Lexicon.csv");
+        File lexicon = new File("Lexicon.csv");
         Scanner sc = new Scanner(lexicon);
         ArrayList<Word> words = new ArrayList();
         while (sc.hasNextLine()) {
@@ -30,8 +36,8 @@ public class DatasetBuilder {
                 words.add(new Word(lineSplit[0], Double.parseDouble(lineSplit[1])));
             }
         }
-        File dictionary = new File("/media/thomas/ESD-USB/dataset/dictionary.txt");
-        File labels = new File("/media/thomas/ESD-USB/dataset/sentiment_labels.txt");
+        File dictionary = new File("dictionary.txt");
+        File labels = new File("sentiment_labels.txt");
         
         PrintWriter dictWriter = new PrintWriter(dictionary);
         PrintWriter labelWriter = new PrintWriter(labels);
@@ -45,22 +51,22 @@ public class DatasetBuilder {
         labelWriter.close();
         
         File[] rawFemaleFiles = {
-            new File("/media/thomas/ESD-USB/FemaleAverageTags.txt"),
-            new File("/media/thomas/ESD-USB/FemaleAwfulTags.txt"),
-            new File("/media/thomas/ESD-USB/FemaleGoodTags.txt"),
-            new File("/media/thomas/ESD-USB/FemalePoorTags.txt"),
-            new File("/media/thomas/ESD-USB/FemaleAwesomeTags.txt")};
+            new File("FemaleAverageTags.txt"),
+            new File("FemaleAwfulTags.txt"),
+            new File("FemaleGoodTags.txt"),
+            new File("FemalePoorTags.txt"),
+            new File("FemaleAwesomeTags.txt")};
         
         File[] rawMaleFiles = {
-            new File("/media/thomas/ESD-USB/MaleAverageTags.txt"),
-            new File("/media/thomas/ESD-USB/MaleAwfulTags.txt"),
-            new File("/media/thomas/ESD-USB/MaleGoodTags.txt"),
-            new File("/media/thomas/ESD-USB/MalePoorTags.txt"),
-            new File("/media/thomas/ESD-USB/MaleAwesomeTags.txt")};
+            new File("MaleAverageTags.txt"),
+            new File("MaleAwfulTags.txt"),
+            new File("MaleGoodTags.txt"),
+            new File("MalePoorTags.txt"),
+            new File("MaleAwesomeTags.txt")};
         
-        File masterFile = new File("/media/thomas/ESD-USB/dataset/masterFile.txt");
-        File femaleFile = new File("/media/thomas/ESD-USB/dataset/femaleSnippets.txt");
-        File maleFile = new File("/media/thomas/ESD-USB/dataset/maleSnippets.txt");
+        File masterFile = new File("dataset/masterFile.txt");
+        File femaleFile = new File("dataset/femaleSnippets.txt");
+        File maleFile = new File("dataset/maleSnippets.txt");
         
         fileWriter(rawMaleFiles, masterFile, maleFile);
         fileWriter(rawFemaleFiles, masterFile, femaleFile);
@@ -77,11 +83,13 @@ public class DatasetBuilder {
         PrintWriter masterWriter = new PrintWriter(masterFile);
         PrintWriter outputWriter = new PrintWriter(outputFile);
         
+        // Comment
         for (int i = 0; i < arr.length; i++) {
             sc = new Scanner(arr[i]);
             while (sc.hasNextLine()) {
                 sentences.add(sc.nextLine());
             }
+            // Get some comments and stuff
             for (int j = 0; j < NUMCOMMENTS && j < sentences.size(); j++) {
                 index = r.nextInt(sentences.size());
                 if (!numbers.contains(index)) {
@@ -97,7 +105,8 @@ public class DatasetBuilder {
         masterWriter.close();
         outputWriter.close();
         
-        ConstituencyParse cp = new ConstituencyParse("/media/thomas/ESD-USB/dataset/sents.toks", "/media/thomas/ESD-USB/dataset/parents.txt", false);
+        //Doe spooky stuff to make treee files, ask Dr. Liu if you are missing the java files from the LSTM repo, that's not our code and therefore does not have code monkey approval
+        ConstituencyParse cp = new ConstituencyParse("dataset/sents.toks", "dataset/parents.txt", false);
         
         List<HasWord> tokens = null;
         sc = new Scanner(masterFile);
@@ -128,7 +137,7 @@ public class DatasetBuilder {
             cp.printParents(parent);
         }
         
-        ConstituencyParse cp2 = new ConstituencyParse("/media/thomas/ESD-USB/dataset/sents.toks", "/media/thomas/ESD-USB/dataset/dparents.txt", false);
+        ConstituencyParse cp2 = new ConstituencyParse("dataset/sents.toks", "dataset/dparents.txt", false);
         
         for (int i = 0; i < trees.size(); i++) {
             int[] dparents = cp.depTreeParents(trees.get(i), tokenList.get(i));
@@ -144,9 +153,14 @@ public class DatasetBuilder {
         cp2.close();
     }
     
+    /**
+     * Writes a file
+     * @param masterFile Output file
+     * @throws FileNotFoundException don't do this
+     */
     public static void datasetSentences(File masterFile) throws FileNotFoundException {
-        File output = new File("/media/thomas/ESD-USB/dataset/datasetSentences.txt");
-        File dataSplitFile = new File("/media/thomas/ESD-USB/dataset/datasetSplit.txt");
+        File output = new File("dataset/datasetSentences.txt");
+        File dataSplitFile = new File("dataset/datasetSplit.txt");
         Scanner sc = new Scanner(masterFile);
         PrintWriter pw = new PrintWriter(output);
         PrintWriter pw1 = new PrintWriter(dataSplitFile);

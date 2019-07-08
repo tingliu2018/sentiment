@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author Thomas Talasco
+ * @author Code Monkey A
  */
 public class LexiconBuilder {
     

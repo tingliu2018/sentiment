@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author thomas
+ * @author Code Monkey A
  */
 public class Hypernym {
 
