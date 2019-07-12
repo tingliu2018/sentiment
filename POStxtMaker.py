@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 19 13:01:42 2019
-
-@author: thomas
-"""
-
-# -*- coding: utf-8 -*-
-"""
 Created on Wed Jun 19 12:10:38 2019
 
-@author: thomas
+@author: Code Monkey A
 """
 
 import pandas as pd
