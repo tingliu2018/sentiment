@@ -1,0 +1,18 @@
+Introdution:
+    Instruction on how to run genreate files and run the machine learning code:
+    WARNING: Be sure to have all correct paths for the raw files and where you want your output to go.
+    This can be done by changing the datasetBuilder and sBuilder String for the paths.
+    
+    1: Run main in datasetBuilder to build STree and SOSTree.
+    2: Run the pre-processor code in the machine learning package.
+    3: Run labelCleaner.java to clean up the label files that allows the machine learning to be ran.
+    4: Execute the th command to start machine learning code.
+    
+    All classes and methods are comments on what you need to run them and what they do.
+    
+    This is a link to their repo for further instructions on their lstm package. 
+    Fair Warning, the instructions in this repo are very confusing.
+    https://github.com/stanfordnlp/treelstm
+    
+    Be sure to know lua because most of the package is written in lua.
+    
