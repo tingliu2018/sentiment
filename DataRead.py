@@ -2,7 +2,7 @@
 import pandas as pd
 import math
 """
-@author Thomas Talasco, Yuwei Chen
+@author Code Monkey A & B
 """
 
 def binarySearch(arr, size, word):
