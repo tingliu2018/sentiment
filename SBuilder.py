@@ -2,8 +2,11 @@
 """
 Created on Fri Jul 12 12:05:59 2019
 
-@author: thomas
+@author: Code Monkey A
 """
+
+#Generate STree and SOStr based off of the current masterFile and parents.txt
+#THIS CODE IS CALLED BY DatasetBuilder.java
 
 directory = "/media/thomas/ESD-USB/dataset/" #Change this to where the dataset is stored
 
