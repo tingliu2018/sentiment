@@ -6,6 +6,7 @@ package parsertest;
 //* Date: May 12, 2005
 //* Purpose: Find the relationship amoung words in a passage.
 //* Note:    Uses JWNL, java wordnet library.
+//* Updated: Summer 2019, added Antonym getter, -Code Monkey A & Code Monkey B
 //****************************************************************************
 
 //import edu.albany.ils.remnd.source.SourceClusterGeneric;

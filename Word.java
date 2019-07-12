@@ -1,7 +1,8 @@
 package parsertest;
 /**
  *
- * @author thomas
+ * @author Code Monkey A
+ * @author Code Monkey B
  */
 public class Word implements Comparable {
 

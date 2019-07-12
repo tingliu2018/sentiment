@@ -11,7 +11,7 @@ import net.sf.extjwnl.dictionary.Dictionary;
 
 /**
  *
- * @author Thomas
+ * @author Code Monkey A
  */
 public class PartofSpeechFinder {
 

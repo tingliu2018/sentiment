@@ -14,7 +14,7 @@ import org.apache.log4j.BasicConfigurator;
 
 /**
  *
- * @author Thomas Talasco
+ * @author Code Monkey A
  */
 public class SynsetWriter {
 

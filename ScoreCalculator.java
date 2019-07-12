@@ -8,7 +8,8 @@ import java.util.Scanner;
 
 /**
  *
- * @author Thomas Talasco, Yuwei Chen
+ * @author Code Monkey A
+ * @author Code Monkey B
  */
 public class ScoreCalculator {
 
