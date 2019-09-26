@@ -60,7 +60,7 @@ output = open(usbDir + "ratioCounts.txt", 'w', encoding='utf-8')
 
 output.write("Word\tTotalCount\tAwesomeCount\tGoodCount\tAverageCount\tPoorCount\tAwfulCount\n")
 for word in words:
-    output.write(str(word.word) +"\t"+ str(word.count)+" ") 
+    output.write(str(word.word) +"\t"+ str(word.count)+"\t") 
     word.combineCounts()
     for count in word.combinedCounts:
         output.write(str(count)+"\t")
