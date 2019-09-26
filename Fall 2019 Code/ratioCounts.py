@@ -13,7 +13,6 @@ class Word:
     def combineCounts(self):
         for i in range(0,5):
             self.combinedCounts.append(self.ratingCounts[i] + self.ratingCounts[i+5])
-        print(str(len(self.combinedCounts)))
     
 def linearSearch(arr, word):
     for i in range(0, len(arr)):
@@ -21,9 +20,9 @@ def linearSearch(arr, word):
             return int(i)
     return -1
     
-usbDir = "/media/thomas/ESD-USB/"
+usbDir = "D:\\"
 
-pdData = pd.read_csv(usbDir +'testLexicon.csv', header=0)
+pdData = pd.read_csv(usbDir +'Lexicon.csv', header=0)
 
 wordData = pdData.Word
 
@@ -44,7 +43,7 @@ totalcommentCounter = 0
 commentCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 for i in range(0, len(files)):
-    currentFile = open(files[i], 'r')
+    currentFile = open(files[i], 'r', encoding='utf-8')
     for line in currentFile:
         commentCounts[i] += 1
         for word in wordData:
@@ -53,13 +52,11 @@ for i in range(0, len(files)):
                 if index != -1:
                     words[index].count = words[index].count + 1
                     words[index].updateCount(i)
-                    #print("Old Word "+ word +" at index "+ str(index) +" which is "+ words[index].word)
                 else:
                     words.append(Word(word, 1))
                     words[index].updateCount(i)
-                    #print("New Word "+ word)
                     
-output = open(usbDir + "ratioCounts.txt", 'w')
+output = open(usbDir + "ratioCounts.txt", 'w', encoding='utf-8')
 
 output.write("Word\tTotalCount\tAwesomeCount\tGoodCount\tAverageCount\tPoorCount\tAwfulCount\n")
 for word in words:
