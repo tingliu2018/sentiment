@@ -46,7 +46,6 @@ public class SynsetWriter {
             String word = lineSplit[0];
             System.out.println("Now Examining Word Number " + counter + " - " + word);
             Word currentWord = new Word(word.toLowerCase(), Double.parseDouble(lineSplit[1]));
-            currentWord.dictionaryLookUp();
 
             for (IndexWord iWord : currentWord.getIndexWords()) {
                 if (iWord != null && Double.parseDouble(lineSplit[1]) != 0.1) {
@@ -70,23 +69,18 @@ public class SynsetWriter {
 
                     for (Object obj : synonyms) {
                         Word tempWord = new Word(obj.toString().toLowerCase(), new Word(lineSplit[0], Double.parseDouble(lineSplit[1])));
-                        tempWord.setPartOfSpeech(iWord.getPOS().toString().toLowerCase());
                         synonymList.add(tempWord);
                     }
                     for (Object obj : antonyms) {
                         Word tempWord = new Word(obj.toString().toLowerCase(), new Word(lineSplit[0], Double.parseDouble(lineSplit[1])));
-                        tempWord.setPartOfSpeech(iWord.getPOS().toString().toLowerCase());
                         antonymList.add(tempWord);
                     }
                     for (Object obj : hyponyms) {
                         Word tempWord = new Word(obj.toString().toLowerCase(), currentWord);
-                        tempWord.dictionaryLookUp();
-                        for (IndexWord tempIndexWord : tempWord.getIndexWords()) {
+                        IndexWord tempIndexWord = tempWord.getHighestPOS();
                             if (tempIndexWord != null && willWeKeepThisWord(iWord, tempIndexWord)) {
-                                tempWord.setPartOfSpeech(tempIndexWord.getPOS().toString().toLowerCase());
                                 hyponymList.add(tempWord);
                             }
-                        }
                     }
 
                 } else {

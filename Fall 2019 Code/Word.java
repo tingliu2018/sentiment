@@ -21,8 +21,6 @@ public class Word implements Comparable {
     protected double poorCount = 0;
     protected double score = -1;
     protected double lexScore = -1;
-    /* 0 = Adjective, 1 = Adverb, 3 = Noun, 4 = Verb */
-    protected IndexWord[] iWords = new IndexWord[4];
     protected Word parent = null;
     protected String partOfSpeech = "";
 
@@ -61,9 +59,10 @@ public class Word implements Comparable {
         this.score = parent.getScore();
         this.parent = parent;
     }
-    
+
     /**
      * Word object for when there is more than one score
+     *
      * @param word Word string
      * @param score Our Score which we generated previously
      * @param lexScore Lexicon Score
@@ -161,9 +160,9 @@ public class Word implements Comparable {
     public void setLexScore(double lexScore) {
         this.lexScore = lexScore;
     }
-    
-    public double getTotalCount(){
-        return awesomeCount + goodCount + averageCount + poorCount + awfulCount; 
+
+    public double getTotalCount() {
+        return awesomeCount + goodCount + averageCount + poorCount + awfulCount;
     }
 
     @Override
@@ -172,41 +171,54 @@ public class Word implements Comparable {
     }
 
     /**
-    @Override
-    public int compareTo(Object obj) {
-        Word compareWord = (Word) obj;
-        return (int) (compareWord.getCount() - this.count);
-    }
-    **/
+     * @Override public int compareTo(Object obj) { Word compareWord = (Word)
+     * obj; return (int) (compareWord.getCount() - this.count); }
+    *
+     */
     @Override
     public int compareTo(Object obj) {
         Word compareWord = (Word) obj;
         return this.word.compareTo(compareWord.getWord());
     }
-    
+
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         Word compareWord = (Word) obj;
         return this.word.equals(compareWord.getWord());
     }
-    
-    public void dictionaryLookUp() throws JWNLException{
+
+    public IndexWord getHighestPOS() throws JWNLException {
+        Dictionary dictionary = Dictionary.getDefaultResourceInstance();
+        IndexWord iWord = dictionary.getIndexWord(POS.ADJECTIVE, this.word);
+        if (iWord == null) {
+            iWord = dictionary.getIndexWord(POS.ADVERB, this.word);
+            if (iWord == null) {
+                iWord = dictionary.getIndexWord(POS.VERB, this.word);
+                if (iWord == null) {
+                    iWord = dictionary.getIndexWord(POS.NOUN, this.word);
+                }
+            }
+        }
+        return iWord;
+    }
+
+    public IndexWord[] getIndexWords() throws JWNLException {
+        /* 0 = Adjective, 1 = Adverb, 3 = Noun, 4 = Verb */
+        IndexWord[] iWords = new IndexWord[4];
+
         Dictionary dictionary = Dictionary.getDefaultResourceInstance();
         iWords[0] = dictionary.getIndexWord(POS.ADJECTIVE, this.word);
         iWords[1] = dictionary.getIndexWord(POS.ADVERB, this.word);
         iWords[2] = dictionary.getIndexWord(POS.VERB, this.word);
         iWords[3] = dictionary.getIndexWord(POS.NOUN, this.word);
+        return iWords;
     }
-    
-    public IndexWord[] getIndexWords(){
-        return this.iWords;
-    }
-    
-    public void setPartOfSpeech(String pos){
+
+    public void setPartOfSpeech(String pos) {
         this.partOfSpeech = pos;
     }
-    
-    public String getPartOfSpeech(){
+
+    public String getPartOfSpeech() {
         return this.partOfSpeech;
     }
 }

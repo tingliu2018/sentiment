@@ -24,9 +24,14 @@ import edu.stanford.nlp.process.DocumentPreprocessor;
 public class SentenceParser {
     
     public static void main(String[] args) throws FileNotFoundException {
-        String filename = "/home/thomas/Desktop/totally not suspicious story from a creepy old man thats obviously not evil";
-        File bestwordfile = new File(filename);
-        sentenceParser(bestwordfile);
+        String root = "T:\\Academics\\Research\\rawFiles\\";
+        String[] fileNames = {"FemaleAverageTags.txt", "FemaleAwesomeTags.txt", "FemaleAwfulTags.txt", "FemaleGoodTags.txt", "FemalePoorTags.txt",
+        "MaleAverageTags.txt", "MaleAwesomeTags.txt", "MaleAwfulTags.txt", "MaleGoodTags.txt", "MalePoorTags.txt"};
+        for(String filename : fileNames) {
+            filename = root + filename;
+            File file = new File(filename);
+            sentenceParser(file);
+        }
     }
         /**
      * Separate comments with multiple sentences in to separate comments of single sentences.
