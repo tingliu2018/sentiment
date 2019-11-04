@@ -7,7 +7,9 @@ package wordproject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -15,22 +17,58 @@ import java.util.Scanner;
  * @author thomas
  */
 public class CleanUp {
+
     public static void main(String[] args) throws FileNotFoundException {
-        File fileIn = new File("/media/thomas/ESD-USB/Synset/NewLexicon/Antonyms.txt");
-        Scanner sc = new Scanner(fileIn);
-        ArrayList<Word> Words = new ArrayList<Word>();
-        while(sc.hasNextLine()) {
-            String[] line = sc.nextLine().split(" ");
-            Words.add(new Word(line[0], Double.parseDouble(line[1])));
-            
+        String root = "T:\\Academics\\Research\\Synset\\NewLexicon";
+        String[] directories = {root + "\\0-5000", root + "\\5001-10000", root + "\\10001-14876", root + "\\14878-21000"};
+        String[] fileNames = {"\\Antonyms.txt", "\\Hyponyms.txt", "\\Synonyms.txt"};
+
+        ArrayList<Word> antonyms = new ArrayList<Word>();
+        ArrayList<Word> hyponyms = new ArrayList<Word>();
+        ArrayList<Word> synonyms = new ArrayList<Word>();
+
+        for (String directory : directories) {
+            for (String fileName : fileNames) {
+                File file = new File(directory + fileName);
+                Scanner sc = new Scanner(file);
+                while (sc.hasNextLine()) {
+                    String[] lineSplit = sc.nextLine().split(" ");
+                    switch (fileName) {
+                        case "\\Antonyms.txt":
+                            antonyms.add(new Word(lineSplit[0], Double.parseDouble(lineSplit[1])));
+                            break;
+
+                        case "\\Hyponyms.txt":
+                            hyponyms.add(new Word(lineSplit[0], Double.parseDouble(lineSplit[1])));
+                            break;
+
+                        case "\\Synonyms.txt":
+                            synonyms.add(new Word(lineSplit[0], Double.parseDouble(lineSplit[1])));
+                            break;
+
+                        default:
+                            System.out.println("ERROR");
+                            break;
+                    }
+                }
+                sc.close();
+            }
         }
-        ArrayList<Word> words = scoreWords(Words);
-        for (int i = 0; i < words.size()-1; i++) {
-                System.out.println(words.get(i));
-                //System.out.println(words.get(i+1));
-                System.out.println("");
-        }
+
+        Collections.sort(antonyms);
+        Collections.sort(hyponyms);
+        Collections.sort(synonyms);
+
+        ArrayList CondensedAntonyms = scoreWords(antonyms);
+        ArrayList CondensedHyponyms = scoreWords(hyponyms);
+        ArrayList CondensedSynonyms = scoreWords(synonyms);
+
+        printToFile(CondensedAntonyms, "Antonyms.txt");
+        printToFile(CondensedHyponyms, "Hyponyms.txt");
+        printToFile(CondensedSynonyms, "Synonyms.txt");
+
     }
+
     public static ArrayList<Word> scoreWords(ArrayList<Word> wordList) {
         ArrayList<Word> condensedList = new ArrayList<Word>();
         int i = 0, j;
@@ -54,5 +92,18 @@ public class CleanUp {
         }
         return condensedList;
     }
-    
+
+    public static void printToFile(ArrayList<Word> words, String filename) throws FileNotFoundException {
+        File file = new File("T:\\Academics\\Research\\Synset\\NewLexicon\\" + filename);
+        PrintWriter p = new PrintWriter(file);
+        for (Word word : words) {
+            p.println(word.getWord() + " " + format(word.getScore()));
+        }
+        p.close();
+    }
+
+    public static String format(double number) {
+        return String.format("%.3f", number);
+    }
+
 }
